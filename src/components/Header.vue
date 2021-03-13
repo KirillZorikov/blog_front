@@ -1,0 +1,86 @@
+<template>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+      <a class="navbar-brand mr-5" href="#"><span style="color:red">Ya</span>Tube</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <form class="form-inline my-2 my-lg-0" action="#">
+          <input class="form-control mr-1" type="text" placeholder="Поиск по сайту" name="search">
+          <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Поиск</button>
+        </form>
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item mr-5">
+            <a class="nav-link" href="#">Добавить запись</a>
+          </li>
+          <li class="nav-item dropdown">
+            <div class="btn-group open">
+<!--              {% if user.is_authenticated %}-->
+<!--              <a class="btn btn-primary"-->
+<!--                 href="#">-->
+<!--                <i class="fa fa-user fa-fw"></i>-->
+<!--&lt;!&ndash;                {{ user.username }}&ndash;&gt;-->
+<!--                username-->
+<!--              </a>-->
+<!--              <a class="btn btn-primary dropdown-toggle"-->
+<!--                 data-toggle="dropdown">-->
+<!--              </a>-->
+<!--              <ul class="dropdown-menu">-->
+<!--                <li>-->
+<!--                  <a href="#">-->
+<!--                    <i class="fa fa-key fa-fw"></i>-->
+<!--                    Изменить пароль-->
+<!--                  </a>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                  <a href="#">-->
+<!--                    <i class="fa fa fa-sign-out-alt fa-fw"></i>-->
+<!--                    Выйти-->
+<!--                  </a>-->
+<!--                </li>-->
+<!--              </ul>-->
+<!--              {% else %}-->
+              <a class="btn btn-primary text-light">
+                <i class="fa fa-user fa-fw"></i>
+                Вход
+              </a>
+              <a class="btn btn-primary dropdown-toggle"
+                 data-toggle="dropdown">
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="#">
+                    <i class="fa fa fa-sign-in-alt fa-fw"></i>
+                    Войти
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa fa-pencil-alt fa-fw"></i>
+                    Регистрация
+                  </a>
+                </li>
+              </ul>
+<!--              {% endif %}-->
+            </div>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </nav>
+
+</template>
+
+<script>
+export default {
+  name: "Nav"
+}
+</script>
+
+<style scoped>
+
+</style>
