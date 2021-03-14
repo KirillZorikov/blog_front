@@ -1,49 +1,63 @@
 <template>
-  <main>
-        <div class="container mt-4">
-            <h1 class="text-right">Header</h1>
-<!--            <div class="row mt-1 mb-1">-->
-<!--                {% if messages %}-->
-<!--                    {% for message in messages %}-->
-<!--                        <div class="alert alert-success m-auto" role="alert">-->
-<!--                            {{ message }}-->
-<!--                            <button type="button" class="close ml-3" data-dismiss="alert" aria-label="Close">-->
-<!--                                <span aria-hidden="true">&times;</span>-->
-<!--                            </button>-->
-<!--                        </div>-->
-<!--                    {% endfor %}-->
-<!--                {% endif %}-->
-<!--            </div>-->
-            <div class="row mt-1">
-                <div class="col-lg-3">
-                  <SideBar />
-                </div>
-                <div class="col-lg-9">
 
-                    {% include "posts/include/menu.html" with index=True sort=sort %}
-                    {% cache 20 index_page %}
-                    {% endcache %}
-                        {% for post in page %}
-                            {% include "posts/include/card.html" with post=post params=param page_num=page.number %}
-                        {% endfor %}
 
-                    {% if page.has_other_pages %}
-                        {% include "posts/include/paginator.html" with items=page paginator=paginator params=param %}
-                    {% endif %}
+  <h1 class="text-right">Header</h1>
+  <!--            <div class="row mt-1 mb-1">-->
+  <!--                {% if messages %}-->
+  <!--                    {% for message in messages %}-->
+  <!--                        <div class="alert alert-success m-auto" role="alert">-->
+  <!--                            {{ message }}-->
+  <!--                            <button type="button" class="close ml-3" data-dismiss="alert" aria-label="Close">-->
+  <!--                                <span aria-hidden="true">&times;</span>-->
+  <!--                            </button>-->
+  <!--                        </div>-->
+  <!--                    {% endfor %}-->
+  <!--                {% endif %}-->
+  <!--            </div>-->
+  <div class="row mt-1">
+    <div class="col-lg-3">
+      <SideBar/>
+    </div>
+    <div class="col-lg-9">
 
-                </div>
-            </div>
-        </div>
-    </main>
+
+
+      <div v-for="post in listPosts.response" :key="post.id">
+        <PostCard v-bind:post="post"/>
+<!--        {{ post.text }}-->
+<!--        <hr>-->
+      </div>
+
+    </div>
+  </div>
 </template>
 
 <script>
 
 import SideBar from "@/components/SideBar";
+import PostCard from "@/components/PostCard";
+
 export default {
   name: 'Home',
+  data() {
+    return {
+      listPosts: []
+    }
+  },
   components: {
+    PostCard,
     SideBar
+  },
+  created () {
+    this.loadListPosts()
+  },
+  methods: {
+    async loadListPosts() {
+      this.listPosts = await fetch(
+          `${this.$store.getters.getServerUrl}/posts/`
+      ).then(response => response.json())
+      console.log(this.listPosts.response)
+    }
   }
 }
 </script>

@@ -1,4 +1,4 @@
-# vue3-yatube
+# vue3-blog
 
 ## Project setup
 ```
