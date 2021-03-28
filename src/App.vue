@@ -9,17 +9,19 @@
 </template>
 
 <style>
-@import "assets/bootstrap/dist/css/bootstrap.min.css";
+@import "assets/bootstrap.min.css";
 @import "assets/posts/style.css";
-@import "assets/fontawesome/css/fontawesome.css";
-@import "assets/bootstrap/dist/css/bootstrap-select.css";
+@import "assets/fontawesome.css";
+@import "assets/bootstrap-select.css";
 </style>
 <script>
+
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "@/views/Home";
 
 export default {
-  components: {Home, Header, Footer}
+  components: {Home, Header, Footer},
+
 }
 </script>
