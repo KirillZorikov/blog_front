@@ -9,7 +9,7 @@
           <!--          <img src="../assets/imgs/postUpvote.png" alt="up-vote">-->
         </a>
         <small class="rating font-weight-bold">
-          500
+          {{ post.likes_count }}
         </small>
         <a class="down-vote" href="#">
           <!--          <img src="../assets/imgs/postUpvoteIconActive.png" alt="down-vote">-->
@@ -20,40 +20,48 @@
       <div class="card-body col-11 pl-3">
         <h6 class="card-subtitle mb-2 text-muted d-flex justify-content-between align-items-center">
           <a href="#">
-            Лев Николаевич Толстой
+            {{ post.author.first_name }} {{ post.author.last_name }}
           </a>
           <!--          {% if post.group and not skip_group %}-->
-          <span class="card_group">Запись сообщества:
+          <span v-if="post.group" class="card_group">Запись сообщества:
                         <a href="#" class="card-link">
-                            GreatestLeo
+                            {{ post.group.title }}
                         </a>
                     </span>
           <!--          {% endif %}-->
         </h6>
         <div class="h7 text-muted">
-          <i class="fas fa-user mr-0"></i>{{ post.author }}
-          <i class="far fa-calendar-alt mr-0 ml-3"></i>{{ post.pub_date }}
+          <i class="fas fa-user mr-0"></i> {{ post.author.username }}
+          <i class="far fa-calendar-alt mr-0 ml-3"></i> {{ post.pub_date.split('T')[0].replaceAll('-', '.') }}
         </div>
         <hr>
-        <!--        {% if show_all_text or post.text|bleach|length < 301 %}-->
-        {{ post.text }}
+        <template v-if="show_all_text">
+          <span v-html="post.text"></span>
+        </template>
+        <template v-else>
+          <span class="" v-html="post.text_preview + '...'"></span>
+        </template>
+
         <!--        {% else %}-->
         <!--        <span class="card-text">{{ post.text|bleach|truncatechars_html:300 }}</span>-->
         <!--        {% if post.text|bleach|length > 300 %}-->
-        <a href="#"
-           class="font-italic font-weight-light">читать далее</a>
+        <router-link :to="{name: 'Post', params:{id: post.id}}" class="font-italic font-weight-light">
+          читать далее
+        </router-link>
         <div>
           <!--          {% for tag in post.tags.all %}-->
-          <a href="#" class="card-link ml-0">
-            <span class="badge badge-primary">Kotiki</span>
-          </a>
+          <template v-for="tag in post.tags" :key="tag">
+            <a href="#" class="card-link ml-1">
+              <span class="badge badge-primary">{{ tag.title }}</span>
+            </a>
+          </template>
           <!--          {% endfor %}-->
         </div>
         <hr>
         <a class="card-link">
           <i class="fa fa-comment"></i> Комментарии
         </a>
-        <small class="text-muted">(88)</small>
+        <small class="text-muted">({{ post.comments_count }})</small>
         <!--        {% if request.user.id == post.author.id %}-->
         <a class="card-link float-right ml-3 card_edit" href="#">
           <i class="far fa-trash-alt"></i> Удалить
@@ -70,7 +78,15 @@
 <script>
 export default {
   name: "PostCard",
-  props: ['post']
+  props: [
+    'post',
+    'show_all_text'
+  ],
+  methods: {
+    goTo(post_id) {
+      this.$router.push({name: 'Post', params: {id: post_id}})
+    }
+  }
 }
 </script>
 
