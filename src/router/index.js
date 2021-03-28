@@ -1,6 +1,10 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
 import Home from '../views/Home.vue'
+import Login from '../views/Login.vue';
+import Logout from '../views/Logout.vue';
 import Post from "@/views/Post";
+import Register from "@/views/Register";
+import ChangePassword from "@/views/ChangePassword";
 
 const routes = [
     {
@@ -9,9 +13,26 @@ const routes = [
         component: Home
     },
     {
+      path: '/login',
+      component: Login
+    },
+    {
+      path: '/logout',
+      component: Logout
+    },
+    {
+      path: '/change-password',
+      component: ChangePassword
+    },
+    {
+      path: '/register',
+      component: Register
+    },
+    {
         path: '/post/:id',
         name: 'Post',
-        component: Post
+        component: Post,
+        props: true
     },
     {
         path: '/about',
