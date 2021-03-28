@@ -31,7 +31,7 @@
     <div class="col-md-9">
       <!--      Card-->
       jjj
-      <PostCard/>
+<!--      <PostCard/>-->
       <div class="mt-3">
         <!--        Comments-->
       </div>
@@ -41,12 +41,12 @@
 </template>
 
 <script>
-import PostCard from "@/components/PostCard";
+// import PostCard from "@/components/PostCard";
 export default {
-  name: "Post",
-  components: {
-    PostCard
-  }
+  // name: "Post",
+  // components: {
+  //   PostCard
+  // }
 }
 </script>
 
