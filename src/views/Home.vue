@@ -1,6 +1,4 @@
 <template>
-
-
   <h1 class="text-right">Header</h1>
   <!--            <div class="row mt-1 mb-1">-->
   <!--                {% if messages %}-->
