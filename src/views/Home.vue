@@ -19,15 +19,14 @@
       <SideBar/>
     </div>
     <div class="col-lg-9">
-
-
-
-      <div v-for="post in listPosts.response" :key="post.id">
-        <PostCard v-bind:post="post"/>
-<!--        {{ post.text }}-->
-<!--        <hr>-->
-      </div>
-
+      <template v-if="errorMessage">
+        {{ message }}
+      </template>
+      <template v-else>
+        <div v-for="post in listPosts.response" :key="post.id">
+          <PostCard :post="post" :show_all_text="false"/>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -36,27 +35,36 @@
 
 import SideBar from "@/components/SideBar";
 import PostCard from "@/components/PostCard";
+import UserService from '../services/user.service';
 
 export default {
   name: 'Home',
   data() {
     return {
-      listPosts: []
+      listPosts: [],
+      errorMessage: ''
     }
   },
   components: {
     PostCard,
     SideBar
   },
-  created () {
+  created() {
     this.loadListPosts()
   },
   methods: {
-    async loadListPosts() {
-      this.listPosts = await fetch(
-          `${this.$store.getters.getServerUrl}/posts/`
-      ).then(response => response.json())
-      console.log(this.listPosts.response)
+    loadListPosts() {
+      UserService.getListPosts().then(
+          response => {
+            this.listPosts = response.data;
+          },
+          error => {
+            this.errorMessage =
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString();
+          }
+      );
     }
   }
 }
