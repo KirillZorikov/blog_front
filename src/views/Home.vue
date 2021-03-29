@@ -1,17 +1,15 @@
 <template>
-  <h1 class="text-right">Header</h1>
-  <!--            <div class="row mt-1 mb-1">-->
-  <!--                {% if messages %}-->
-  <!--                    {% for message in messages %}-->
-  <!--                        <div class="alert alert-success m-auto" role="alert">-->
-  <!--                            {{ message }}-->
-  <!--                            <button type="button" class="close ml-3" data-dismiss="alert" aria-label="Close">-->
-  <!--                                <span aria-hidden="true">&times;</span>-->
-  <!--                            </button>-->
-  <!--                        </div>-->
-  <!--                    {% endfor %}-->
-  <!--                {% endif %}-->
-  <!--            </div>-->
+  <h1 class="text-right">Последние обновления на сайте</h1>
+<!---->
+  <div v-if="message" class="row mt-1 mb-1">
+    <div class="alert alert-success m-auto" role="alert">
+      {{ message }}
+      <button type="button" class="close ml-3" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+<!---->
   <div class="row mt-1">
     <div class="col-lg-3">
       <SideBar/>
@@ -37,6 +35,9 @@ import UserService from '../services/user.service';
 
 export default {
   name: 'Home',
+  props:[
+      'message'
+  ],
   data() {
     return {
       listPosts: [],
