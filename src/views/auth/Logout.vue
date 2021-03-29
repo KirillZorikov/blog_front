@@ -5,14 +5,14 @@
         <div class="card-header">Вы вышли из системы</div>
         <div class="card-body">
           <p>{{ message }}</p>
-        </div> <!-- card body -->
-      </div> <!-- card -->
-    </div> <!-- col -->
-  </div> <!-- row -->
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import User from '../models/user';
+import User from '@/models/user';
 
 export default {
   name: "Logout",
@@ -22,17 +22,8 @@ export default {
       message: '',
     };
   },
-  computed: {
-    loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
-    }
-  },
   created() {
-    if (!this.loggedIn) {
-      this.$router.push('/login');
-    } else {
-      this.handleLogout()
-    }
+    this.handleLogout()
   },
   methods: {
     handleLogout() {
@@ -41,11 +32,11 @@ export default {
             this.message = "Вы вышли из своей учётной записи. Ждём вас снова!"
           },
           error => {
-              this.message =
-                  (error.response && error.response.data) ||
-                  error.message ||
-                  error.toString();
-            }
+            this.message =
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString();
+          }
       )
     }
   }

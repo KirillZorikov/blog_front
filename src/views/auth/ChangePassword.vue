@@ -85,7 +85,7 @@ export default {
         this.loading = true;
         this.$store.dispatch('auth/changePassword', this.user).then(
             () => {
-              this.$router.push('/');
+              this.$router.push({name: 'Home', params:{message: 'Пароль изменён!'}});
             },
             error => {
               this.loading = false;

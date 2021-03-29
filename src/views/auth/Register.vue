@@ -2,7 +2,7 @@
   <div class="container register">
     <div class="row">
       <div class="col-md-3 register-left">
-        <img src="../assets/imgs/rocket.png" alt=""/>
+        <img src="@/assets/imgs/rocket.png" alt=""/>
         <h3>Добро пожаловать!</h3>
         <p>Потратив всего 30 секунд на регистрацию,
           вы сможете оставлять записи в этом замечательном блоге!</p>
@@ -110,7 +110,7 @@
                                 </span>
                 </div>
                 <input
-                    v-model="user.password2"
+                    v-model="password2"
                     type="password"
                     class="form-control"
                     name="username"
@@ -126,13 +126,16 @@
               <!--            </button>-->
               <!--          </div>-->
               <!--          <script src='https://www.google.com/recaptcha/api.js'></script>-->
-              <!--          <div class="form-group g-recaptcha input-group"-->
-              <!--               data-sitekey="6LdB0Q0aAAAAADNyqvkOzqNuhJnHglBjzY-LVzqn"></div>-->
+              <div class="form-group g-recaptcha input-group"
+                   data-sitekey="6LdB0Q0aAAAAADNyqvkOzqNuhJnHglBjzY-LVzqn"></div>
               <div class="form-group mt-3">
                 <button type="submit" class="btn btn-primary btn-block" :disabled="loading">
                   <span v-show="loading" class="spinner-border spinner-border-sm"></span>
                   <span>Зарегистрироваться</span>
                 </button>
+              </div>
+              <div class="form-group">
+                <div v-if="message" class="alert alert-danger" role="alert">{{ message }}</div>
               </div>
             </form>
           </div>
@@ -152,8 +155,18 @@ export default {
     return {
       user: new User(),
       loading: false,
-      message: ''
+      message: '',
+      password2: ''
     };
+  },
+  mounted() {
+    new Promise((resolve, reject) => {
+      const $script = document.createElement('script')
+      $script.src = 'https://www.google.com/recaptcha/api.js'
+      resolve(document.head.appendChild($script));
+
+      setTimeout(() => reject(new Error("Google reCaptcha не инициализирована")), 3000);
+    });
   },
   computed: {
     loggedIn() {
@@ -166,11 +179,25 @@ export default {
     }
   },
   methods: {
-    handleRegister() {
+    handleRegister(submitEvent) {
+      let recaptcha = submitEvent.target.elements['g-recaptcha-response'].value
+      if (!recaptcha) {
+        this.message = 'Введите капчу!'
+        return
+      }
+      this.user.recaptcha_key = recaptcha
+      this.user.password2 = this.password2
       this.loading = true;
       this.$store.dispatch('auth/register', this.user).then(
           () => {
-            this.$router.push('/login');
+            this.$store.dispatch('auth/login', this.user).then(
+                () => {
+                  this.$router.push({name: 'Home', params: {message: 'Вы успешно зарегистрировались!'}});
+                },
+                error => {
+                  this.$router.push('/login');
+                }
+            )
           },
           error => {
             this.loading = false;
