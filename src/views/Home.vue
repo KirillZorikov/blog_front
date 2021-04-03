@@ -12,7 +12,8 @@
 <!---->
   <div class="row mt-1">
     <div class="col-lg-3">
-      <SideBar/>
+      <NavGroups/>
+      <NavTags/>
     </div>
     <div class="col-lg-9">
       <template v-if="errorMessage">
@@ -31,7 +32,9 @@
 
 import SideBar from "@/components/SideBar";
 import PostCard from "@/components/PostCard";
-import UserService from '../services/user.service';
+import UserService from '@/services/user.service';
+import NavTags from "@/components/nav/NavTags";
+import NavGroups from "@/components/nav/NavGroups";
 
 export default {
   name: 'Home',
@@ -46,7 +49,9 @@ export default {
   },
   components: {
     PostCard,
-    SideBar
+    SideBar,
+    NavTags,
+    NavGroups,
   },
   created() {
     this.loadListPosts()
