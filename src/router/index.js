@@ -2,9 +2,10 @@ import {createRouter, createWebHashHistory} from 'vue-router'
 import Home from '@/views/Home.vue'
 import Login from '@/views/auth/Login.vue';
 import Logout from '@/views/auth/Logout.vue';
-import Post from "@/views/Post";
 import Register from "@/views/auth/Register";
 import ChangePassword from "@/views/auth/ChangePassword";
+import NotFound from "@/views/misc/NotFound";
+import Post from "@/views/Post";
 
 const routes = [
     {
@@ -15,18 +16,22 @@ const routes = [
     },
     {
         path: '/login',
+        name: 'Login',
         component: Login
     },
     {
         path: '/logout',
+        name: 'Logout',
         component: Logout
     },
     {
         path: '/change-password',
+        name: 'ChangePassword',
         component: ChangePassword
     },
     {
         path: '/register',
+        name: 'Register',
         component: Register
     },
     {
@@ -42,7 +47,17 @@ const routes = [
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    }
+    },
+    {
+        path: '/404',
+        name: '404',
+        component: NotFound,
+        props: true
+    },
+    // {
+    //     path: "/:catchAll(.*)",
+    //     redirect: '/404'
+    // }
 ]
 
 const router = createRouter({
@@ -51,12 +66,15 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const publicPages = ['/login', '/register', '/', '/post/:id'];
-    const authRequired = !publicPages.includes(to.path);
+    const publicPages = ['Home', 'Post', 'Register', 'Login', '404'];
+    const authRequired = !publicPages.includes(to.name);
     const loggedIn = localStorage.getItem('user');
-
-    // trying to access a restricted page + not logged in
-    // redirect to login page
+    if (!to.name) {
+        next({
+            name: '404',
+            params: {from_url: to.path}
+        })
+    }
     if (authRequired && !loggedIn) {
         next('/login');
     } else {
