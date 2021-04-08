@@ -30,11 +30,10 @@
 
 <script>
 
-import SideBar from "@/components/SideBar";
-import PostCard from "@/components/PostCard";
-import UserService from '@/services/user.service';
-import NavTags from "@/components/nav/NavTags";
-import NavGroups from "@/components/nav/NavGroups";
+import PostCard from "../components/PostCard";
+import UserService from '../services/user.service';
+import NavTags from "../components/nav/NavTags";
+import NavGroups from "../components/nav/NavGroups";
 
 export default {
   name: 'Home',
@@ -49,7 +48,6 @@ export default {
   },
   components: {
     PostCard,
-    SideBar,
     NavTags,
     NavGroups,
   },

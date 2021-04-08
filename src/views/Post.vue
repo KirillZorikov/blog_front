@@ -61,7 +61,7 @@ export default {
       UserService.getPost(this.id).then(
           response => {
             this.post = response.data;
-            this.loadAuthor()
+            // this.loadAuthor()
           }
       )
     },
