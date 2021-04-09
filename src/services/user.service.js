@@ -7,14 +7,25 @@ class UserService {
     async getListPosts() {
         return await axios.get(API_URL + 'posts', {headers: authHeader()});
     }
-    async getPost(id) {
-        return await axios.get(API_URL + `posts/${id}`, {headers: authHeader()});
+    async getPost(id, ordering, filtering) {
+        let params = ordering ? {ordering: ordering.toString()}: {}
+        params = Object.assign({}, params, filtering ? filtering: {})
+        return await axios.get(API_URL + `posts/${id}`, {
+            headers: authHeader(),
+            params: params,
+        });
     }
-    async getListGroups() {
-        return await axios.get(API_URL + 'groups', {headers: authHeader()});
+    async getListGroups(ordering=['-posts_count', 'title']) {
+        return await axios.get(API_URL + 'groups', {
+            headers: authHeader(),
+            params: {ordering: ordering.toString()},
+        });
     }
     async getListTags() {
         return await axios.get(API_URL + 'tags', {headers: authHeader()});
+    }
+    async getAuthorInfo(username) {
+        return await axios.get(API_URL + `users/${username}`, {headers: authHeader()});
     }
 }
 

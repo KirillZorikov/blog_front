@@ -41,7 +41,7 @@
 
 <script>
 import UserService from '../services/user.service';
-import PostCard from "@/components/PostCard";
+import PostCard from "../components/PostCard";
 
 export default {
   name: "Post",
@@ -61,7 +61,7 @@ export default {
       UserService.getPost(this.id).then(
           response => {
             this.post = response.data;
-            // this.loadAuthor()
+            this.loadAuthor()
           }
       )
     },
