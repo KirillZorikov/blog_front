@@ -2,14 +2,14 @@
   <div class="container register">
     <div class="row">
       <div class="col-md-3 register-left">
-        <img src="@/assets/imgs/rocket.png" alt=""/>
+        <img src="../../assets/imgs/rocket.png" alt=""/>
         <h3>Добро пожаловать!</h3>
         <p>Войдите в свой аккаунт и вы
           сможете оставлять записи в этом замечательном блоге!</p>
 
-        <a href="signup">
+        <router-link :to="{name: 'Register'}">
           <input type="submit" name="" value="Регистрация"/> <br/>
-        </a>
+        </router-link>
       </div>
       <div class="col-md-9 register-right">
         <div class="tab-content">

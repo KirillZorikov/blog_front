@@ -2,11 +2,11 @@
   <div class="container register">
     <div class="row">
       <div class="col-md-3 register-left">
-        <img src="@/assets/imgs/rocket.png" alt=""/>
+        <img src="../../assets/imgs/rocket.png" alt=""/>
         <h3>Добро пожаловать!</h3>
         <p>Потратив всего 30 секунд на регистрацию,
           вы сможете оставлять записи в этом замечательном блоге!</p>
-        <router-link to="/login">
+        <router-link :to="{name: 'Login'}">
           <input type="submit" name="" value="Войти"/> <br/>
         </router-link>
       </div>

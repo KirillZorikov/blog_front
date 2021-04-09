@@ -29,13 +29,13 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li>
-                    <router-link to="/change-password">
+                    <router-link :to="{name: 'ChangePassword'}">
                       <i class="fa fa-key fa-fw"></i>
                       Изменить пароль
                     </router-link>
                   </li>
                   <li>
-                    <router-link to="/logout">
+                    <router-link :to="{name: 'Logout'}">
                       <i class="fa fa fa-sign-out-alt fa-fw"></i>
                       Выйти
                     </router-link>
@@ -43,7 +43,7 @@
                 </ul>
               </template>
               <template v-else>
-                <router-link to="/login" class="btn btn-primary text-light">
+                <router-link :to="{name: 'Login'}" class="btn btn-primary text-light">
                   <i class="fa fa-user fa-fw"></i>
                   Вход
                 </router-link>
@@ -52,13 +52,13 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li>
-                    <router-link to="/login">
+                    <router-link :to="{name: 'Login'}">
                       <i class="fa fa fa-sign-in-alt fa-fw"></i>
                       Войти
                     </router-link>
                   </li>
                   <li>
-                    <router-link to="/register">
+                    <router-link :to="{name: 'Register'}">
                       <i class="fa fa-pencil-alt fa-fw"></i>
                       Регистрация
                     </router-link>
