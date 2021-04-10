@@ -20,7 +20,7 @@
         {{ message }}
       </template>
       <template v-else>
-        <div v-for="post in listPosts.response" :key="post.id">
+        <div v-for="post in listPosts" :key="post.id">
           <PostCard :post="post" :show_all_text="false"/>
         </div>
       </template>
@@ -43,6 +43,7 @@ export default {
   data() {
     return {
       listPosts: [],
+      group: '',
       errorMessage: ''
     }
   },
@@ -52,13 +53,13 @@ export default {
     NavGroups,
   },
   created() {
-    this.loadListPosts()
+    this.loadListPosts();
   },
   methods: {
     loadListPosts() {
       UserService.getListPosts().then(
           response => {
-            this.listPosts = response.data;
+            this.listPosts = response.data.response;
           },
           error => {
             this.errorMessage =
@@ -67,7 +68,7 @@ export default {
                 error.toString();
           }
       );
-    }
+    },
   }
 }
 </script>

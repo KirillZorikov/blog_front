@@ -1,11 +1,12 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
-import Home from '@/views/Home.vue'
-import Login from '@/views/auth/Login.vue';
-import Logout from '@/views/auth/Logout.vue';
-import Register from "@/views/auth/Register";
-import ChangePassword from "@/views/auth/ChangePassword";
-import NotFound from "@/views/misc/NotFound";
-import Post from "@/views/Post";
+import Home from '../views/Home.vue'
+import Login from '../views/auth/Login.vue';
+import Logout from '../views/auth/Logout.vue';
+import Register from "../views/auth/Register";
+import ChangePassword from "../views/auth/ChangePassword";
+import NotFound from "../views/misc/NotFound";
+import Post from "../views/Post";
+import Group from "../views/Group";
 
 const routes = [
     {
@@ -41,6 +42,12 @@ const routes = [
         props: true
     },
     {
+        path: '/group/:slug',
+        name: 'Group',
+        component: Group,
+        props: true
+    },
+    {
         path: '/about',
         name: 'About',
         // route level code-splitting
@@ -66,7 +73,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const publicPages = ['Home', 'Post', 'Register', 'Login', '404'];
+    const publicPages = ['Home', 'Post', 'Register', 'Login', '404', 'Group'];
     const authRequired = !publicPages.includes(to.name);
     const loggedIn = localStorage.getItem('user');
     if (!to.name) {

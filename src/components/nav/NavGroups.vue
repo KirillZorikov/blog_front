@@ -2,15 +2,15 @@
   <div class="list-group mb-5 groups">
     <h4 class="card-header">Сообщества</h4>
     <template v-for="group in listGroups" :key="group">
-      <a v-if="slug && slug === group.slug" href="#"
+      <router-link v-if="slug && slug === group.slug" :to="{name: 'Group', params:{slug: group.slug}}"
          class="list-group-item list-group-item-action disabled active">
         {{ group.title }}
         <span class="badge badge-dark float-right">{{ group.posts_count }}</span>
-      </a>
-      <a v-else href="#" class="list-group-item list-group-item-action">
+      </router-link>
+      <router-link v-else :to="{name: 'Group', params:{slug: group.slug}}" class="list-group-item list-group-item-action">
         {{ group.title }}
         <span class="badge badge-dark float-right">{{ group.posts_count }}</span>
-      </a>
+      </router-link>
     </template>
   </div>
 </template>
