@@ -16,6 +16,7 @@
       <NavTags/>
     </div>
     <div class="col-lg-9">
+      <Menu :ordering="ordering" @order-changed="loadListPosts"/>
       <template v-if="errorMessage">
         {{ message }}
       </template>
@@ -34,6 +35,7 @@ import PostCard from "../components/PostCard";
 import UserService from '../services/user.service';
 import NavTags from "../components/nav/NavTags";
 import NavGroups from "../components/nav/NavGroups";
+import Menu from "../components/Menu";
 
 export default {
   name: 'Home',
@@ -44,20 +46,52 @@ export default {
     return {
       listPosts: [],
       group: '',
-      errorMessage: ''
+      errorMessage: '',
+      ordering: '-pub_date',
+      page: 1
     }
   },
+  computed: {
+    pageStateOptions() {
+      return {
+        ordering: this.ordering,
+        page: this.page
+      };
+    }
+
+  },
   components: {
+    Menu,
     PostCard,
     NavTags,
     NavGroups,
   },
   created() {
-    this.loadListPosts();
+    const windowData = Object.fromEntries(
+      new URL(window.location).searchParams.entries()
+    );
+    this.ordering = windowData.ordering ? windowData.ordering:'-pub_date';
+    if (windowData.page) {
+      this.page = windowData.page;
+    }
+
+    // const VALID_KEYS = ["ordering", "page"];
+    //
+    // VALID_KEYS.forEach(key => {
+    //   if (windowData[key]) {
+    //     this[key] = windowData[key];
+    //   }
+    // });
+    this.loadListPosts(this.ordering);
   },
   methods: {
-    loadListPosts() {
-      UserService.getListPosts().then(
+    loadListPosts(ordering) {
+      this.ordering = ordering
+      if (!ordering.includes('pub_date')) {
+        ordering = [ordering, '-pub_date']
+      }
+      console.log(ordering)
+      UserService.getListPosts(ordering).then(
           response => {
             this.listPosts = response.data.response;
           },
@@ -69,6 +103,17 @@ export default {
           }
       );
     },
+  },
+  watch: {
+    pageStateOptions(value) {
+      // window.history.pushState(
+      //   null,
+      //   document.title,
+      //   `${window.location.pathname}?ordering=${value.ordering.toString()}&page=${value.page}`
+      // );
+      this.$router.push(`${window.location.pathname}?ordering=${value.ordering.toString()}&page=${value.page}`)
+    }
+
   }
 }
 </script>
