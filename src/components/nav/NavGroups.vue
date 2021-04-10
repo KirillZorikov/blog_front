@@ -2,12 +2,8 @@
   <div class="list-group mb-5 groups">
     <h4 class="card-header">Сообщества</h4>
     <template v-for="group in listGroups" :key="group">
-      <router-link v-if="slug && slug === group.slug" :to="{name: 'Group', params:{slug: group.slug}}"
-         class="list-group-item list-group-item-action disabled active">
-        {{ group.title }}
-        <span class="badge badge-dark float-right">{{ group.posts_count }}</span>
-      </router-link>
-      <router-link v-else :to="{name: 'Group', params:{slug: group.slug}}" class="list-group-item list-group-item-action">
+      <router-link :to="{name: 'Group', params:{slug: group.slug}}" class="list-group-item list-group-item-action"
+                   :class="{'disabled active': slug && slug === group.slug}">
         {{ group.title }}
         <span class="badge badge-dark float-right">{{ group.posts_count }}</span>
       </router-link>
@@ -17,7 +13,7 @@
 
 
 <script>
-import UserService from '@/services/user.service';
+import UserService from '../../services/user.service';
 
 export default {
   name: "NavGroups",
