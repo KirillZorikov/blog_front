@@ -18,7 +18,9 @@
     <div class="col-lg-9">
       <Menu/>
       <template v-if="errorMessage">
-        {{ message }}
+        <div class="card not-found h-100 text-center d-flex justify-content-center">
+          {{ errorMessage }}
+        </div>
       </template>
       <template v-else>
         <div v-for="post in listPosts" :key="post.id">
@@ -95,10 +97,11 @@ export default {
             this.totalPages = response.data['pages_count'];
           },
           error => {
-            this.errorMessage =
-                (error.response && error.response.data) ||
-                error.message ||
-                error.toString();
+            if (error.response.status === 404) {
+              this.$router.push({name: '404'})
+            } else {
+              this.errorMessage = error.response.data;
+            }
           }
       );
     },
