@@ -1,42 +1,48 @@
 <template>
   <nav aria-label="Переключение страниц" class="d-flex justify-content-center">
     <ul class="pagination">
-      <li class="page-item">
-        <a class="page-link"
-           href="#">
+      <li class="page-item" :class="{disabled: page === 1}">
+        <button class="page-link" :="{disabled: page === 1}"
+           @click="changePage(page - 1)">
           &laquo;
-        </a>
+        </button>
       </li>
 
-      <template v-for="pageNumber in total" :key="pageNumber">
-        <li class="page-item" :class="{'active': pageNumber === page}">
-          <span v-if="pageNumber === page" class="page-link">
-            {{ pageNumber }}
-          </span>
-          <button v-else class="page-link"
+      <template v-for="pageNumber in paginatorArray" :key="pageNumber">
+        <li class="page-item" :class="{active: pageNumber === page, disabled: pageNumber === '...'}">
+          <button class="page-link" :="{disabled: pageNumber === page || pageNumber === '...'}"
                   @click="changePage(pageNumber)">
             {{ pageNumber }}
           </button>
         </li>
       </template>
 
-      <li class="page-item">
-        <a class="page-link"
-           href="#">
+      <li class="page-item" :class="{disabled: page === total}">
+        <button class="page-link" :="{disabled: page === total}"
+           @click="changePage(page + 1)">
           &raquo;
-        </a>
+        </button>
       </li>
     </ul>
   </nav>
 </template>
 
 <script>
+
+import generatePaginatorArray from "../services/utils";
+
 export default {
   name: "Paginator",
   props: ['total'],
   computed: {
     page() {
       return this.$store.state.page;
+    },
+    ordering() {
+      return this.$store.state.ordering;
+    },
+    paginatorArray() {
+      return generatePaginatorArray(this.total, this.page)
     }
   },
   methods: {
