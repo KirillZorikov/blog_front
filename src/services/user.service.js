@@ -4,9 +4,11 @@ import authHeader from './auth-header';
 const API_URL = 'http://127.0.0.1:8000/api/v1/';
 
 class UserService {
-    async getListPosts(ordering, filtering) {
-        let params = ordering ? {ordering: ordering.toString()}: {}
-        params = Object.assign({}, params, filtering ? filtering: {})
+    async getListPosts(ordering, page, filtering) {
+        let params = ordering ? {ordering: ordering.toString()}: {};
+        params = Object.assign({}, params, filtering ? filtering: {});
+        params = Object.assign({}, params, page ? {page: page}: {});
+        console.log(params)
         return await axios.get(API_URL + `posts`, {
             headers: authHeader(),
             params: params,

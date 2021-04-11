@@ -64,7 +64,7 @@ export default {
   methods: {
     changeOrdering(ordering) {
       this.currentOrdering = ordering;
-      this.$emit('order-changed', ordering);
+      this.$emit('ordering-changed', ordering);
     }
   }
 }
