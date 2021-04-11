@@ -9,8 +9,8 @@
       </li>
 
       <template v-for="pageNumber in total" :key="pageNumber">
-        <li class="page-item" :class="{'active': pageNumber === currentPage}">
-          <span v-if="pageNumber === currentPage" class="page-link">
+        <li class="page-item" :class="{'active': pageNumber === page}">
+          <span v-if="pageNumber === page" class="page-link">
             {{ pageNumber }}
           </span>
           <button v-else class="page-link"
@@ -33,16 +33,28 @@
 <script>
 export default {
   name: "Paginator",
-  props: ['page', 'total'],
+  props: ['total'],
   data() {
     return {
-      currentPage: this.page ? this.page : 1
+      currentPage: this.page
+    }
+  },
+  computed: {
+    page() {
+      return this.$store.state.page;
     }
   },
   methods: {
     changePage(pageNumber) {
-      this.currentPage = pageNumber
-      this.$emit('page-changed', pageNumber)
+      this.currentPage = pageNumber;
+      this.$store.commit('changePage', pageNumber);
+    }
+  },
+  watch: {
+    page() {
+      if (this.currentPage !== this.page) { // if page changed not from Paginator
+        this.changePage(this.page)
+      }
     }
   }
 }

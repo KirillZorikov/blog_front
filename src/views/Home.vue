@@ -16,7 +16,7 @@
       <NavTags/>
     </div>
     <div class="col-lg-9">
-      <Menu :ordering="ordering" @ordering-changed="actionOrderingChanged"/>
+      <Menu/>
       <template v-if="errorMessage">
         {{ message }}
       </template>
@@ -26,7 +26,7 @@
         </div>
       </template>
       <template v-if="totalPages > 1">
-        <Paginator :total="totalPages" :page="page" @page-changed="actionPageChanged"/>
+        <Paginator :total="totalPages"/>
       </template>
     </div>
   </div>
@@ -51,8 +51,6 @@ export default {
       listPosts: [],
       group: '',
       errorMessage: '',
-      ordering: '-pub_date',
-      page: 1,
       totalPages: 1
     }
   },
@@ -62,6 +60,12 @@ export default {
         ordering: this.ordering,
         page: this.page
       };
+    },
+    page() {
+      return this.$store.state.page;
+    },
+    ordering() {
+      return this.$store.state.ordering;
     }
   },
   components: {
@@ -75,33 +79,17 @@ export default {
     const windowData = Object.fromEntries(
         new URL(window.location).searchParams.entries()
     );
-    this.ordering = windowData.ordering ? windowData.ordering : '-pub_date';
-    if (windowData.page) {
-      this.page = parseInt(windowData.page);
+    if (windowData.ordering) {
+      this.$store.commit('changeOrdering', windowData.ordering);
     }
-    this.loadListPosts(this.ordering);
+    if (windowData.page) {
+      this.$store.commit('changePage', parseInt(windowData.page));
+    }
+    this.loadListPosts();
   },
   methods: {
-    actionPageChanged(pageNumber) {
-      this.page = pageNumber;
-      this.loadListPosts();
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 100);
-    },
-    actionOrderingChanged(ordering) {
-      this.ordering = ordering;
-      this.loadListPosts();
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 100);
-    },
     loadListPosts() {
-      let ordering = this.ordering;
-      if (!this.ordering.includes('pub_date')) {
-        ordering = [this.ordering, '-pub_date'];
-      }
-      UserService.getListPosts(ordering, this.page).then(
+      UserService.getListPosts(this.ordering, this.page).then(
           response => {
             this.listPosts = response.data.response;
             this.totalPages = response.data['pages_count'];
@@ -114,6 +102,12 @@ export default {
           }
       );
     },
+    reLoadListPosts() {
+      this.loadListPosts();
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+      }, 100);
+    }
   },
   watch: {
     pageStateOptions(value) {
@@ -131,13 +125,18 @@ export default {
       }
       this.$router.push(url);
     },
-    // $route(to, from) {
-    //   if (to.fullPath === '/') {
-    //     this.page = 1;
-    //     this.ordering = '-pub_date';
-    //     this.loadListPosts();
-    //   }
-    // }
+    page() {
+      this.reLoadListPosts()
+    },
+    ordering() {
+      this.reLoadListPosts()
+    },
+    $route(to, from) {
+      if (to.fullPath === '/') {
+        this.$store.commit('changePage', 1);
+        this.$store.commit('changeOrdering', '-pub_date');
+      }
+    }
   }
 }
 </script>

@@ -24,18 +24,18 @@
         Сортировка по
       </a>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        <button class="dropdown-item" :class="{active: currentOrdering.includes('pub_date')}"
+        <button class="dropdown-item" :class="{active: ordering.includes('pub_date')}"
                 @click="changeOrdering('-pub_date')">
           <!--           href="/?ordering=pub-date"-->
 
           <i class="far fa-calendar-alt"></i> Дате публикации
         </button>
-        <button class="dropdown-item" :class="{active: currentOrdering.includes('comments_count')}"
+        <button class="dropdown-item" :class="{active: ordering.includes('comments_count')}"
                 @click="changeOrdering('-comments_count')">
           <!--           href="/?ordering=comments_count">-->
           <i class="far fa-comment"></i> Кол-ву комментов
         </button>
-        <button class="dropdown-item" :class="{active: currentOrdering.includes('rating')}"
+        <button class="dropdown-item" :class="{active: ordering.includes('rating')}"
                 @click="changeOrdering('-rating')">
           <!--           href="/?ordering=rating"-->
 
@@ -50,21 +50,24 @@
 <script>
 export default {
   name: "Menu",
-  props: ['ordering'],
   data() {
     return {
-      currentOrdering: this.ordering ? this.ordering : '-pub_date'
+      currentOrdering: this.ordering
     }
   },
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
     },
+    ordering() {
+      return this.$store.state.ordering;
+    },
   },
   methods: {
     changeOrdering(ordering) {
       this.currentOrdering = ordering;
-      this.$emit('ordering-changed', ordering);
+      this.$store.commit('changePage', 1);
+      this.$store.commit('changeOrdering', ordering);
     }
   }
 }
