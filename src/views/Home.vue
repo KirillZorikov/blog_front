@@ -17,14 +17,18 @@
     </div>
     <div class="col-lg-9">
       <Menu/>
-      <template v-if="errorMessage">
-        <div class="card not-found h-100 text-center d-flex justify-content-center">
-          {{ errorMessage }}
+      <template v-if="listPosts.length">
+        <div v-for="post in listPosts" :key="post.id">
+          <PostCard :post="post" :show_all_text="false"/>
         </div>
       </template>
       <template v-else>
-        <div v-for="post in listPosts" :key="post.id">
-          <PostCard :post="post" :show_all_text="false"/>
+        <div class="card not-found h-100 text-center d-flex justify-content-center">
+          <p v-if="errorMessage">{{ errorMessage }}</p>
+          <Loading v-if="loading"/>
+          <p v-else>
+            Похоже ещё никто не оставлял свои записи на этом замечательном сайте.
+          </p>
         </div>
       </template>
       <template v-if="totalPages > 1">
@@ -42,6 +46,7 @@ import NavTags from "../components/nav/NavTags";
 import NavGroups from "../components/nav/NavGroups";
 import Menu from "../components/Menu";
 import Paginator from "../components/Paginator";
+import Loading from "../components/Loading";
 
 export default {
   name: 'Home',
@@ -51,6 +56,7 @@ export default {
   data() {
     return {
       listPosts: [],
+      loading: false,
       group: '',
       errorMessage: '',
       totalPages: 1
@@ -71,6 +77,7 @@ export default {
     }
   },
   components: {
+    Loading,
     Paginator,
     Menu,
     PostCard,
@@ -91,12 +98,15 @@ export default {
   },
   methods: {
     loadListPosts() {
+      this.loading = true;
       UserService.getListPosts(this.ordering, this.page).then(
           response => {
+            this.loading = false;
             this.listPosts = response.data.response;
             this.totalPages = response.data['pages_count'];
           },
           error => {
+            this.loading = false;
             if (error.response.status === 404) {
               this.$router.push({name: '404'})
             } else {
@@ -107,9 +117,10 @@ export default {
     },
     reLoadListPosts() {
       this.loadListPosts();
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 100);
+      window.scroll({
+        top: 0,
+        behavior: 'smooth'
+      });
     }
   },
   watch: {

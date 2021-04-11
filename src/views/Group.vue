@@ -17,6 +17,7 @@
       <template v-else>
         <div class="card not-found h-100 text-center d-flex justify-content-center">
           <p v-if="errorMessage">{{ errorMessage }}</p>
+          <Loading v-if="loading"/>
           <p v-else>
             В этом сообществе ещё нет ни одной записи.
             Не упустите возможность стать первым!
@@ -38,6 +39,7 @@ import NavTags from "../components/nav/NavTags";
 import NavGroups from "../components/nav/NavGroups";
 import Paginator from "../components/Paginator";
 import Menu from "../components/Menu";
+import Loading from "../components/Loading";
 
 export default {
   name: 'Group',
@@ -45,12 +47,14 @@ export default {
   data() {
     return {
       listPosts: [],
+      loading: false,
       errorMessage: '',
       group: '',
       totalPages: 1,
     }
   },
   components: {
+    Loading,
     PostCard,
     NavTags,
     NavGroups,
@@ -82,12 +86,14 @@ export default {
   },
   methods: {
     loadListPosts() {
+      this.loading = true;
       UserService.getListPosts(this.ordering, this.page, this.filtering).then(
           response => {
             this.listPosts = response.data.response;
             this.loadGroup();
           },
           error => {
+            this.loading = false;
             if (error.response.status === 404) {
               this.$router.push({name: '404'})
             } else {
@@ -100,8 +106,10 @@ export default {
       UserService.getGroup(this.groupSlug).then(
           response => {
             this.group = response.data;
+            this.loading = false;
           },
           error => {
+            this.loading = false;
             if (error.response.status === 404) {
               this.$router.push({name: '404'})
             } else {
@@ -112,9 +120,10 @@ export default {
     },
     reLoadListPosts() {
       this.loadListPosts();
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 100);
+      window.scroll({
+        top: 0,
+        behavior: 'smooth'
+      });
     }
   },
   watch: {
