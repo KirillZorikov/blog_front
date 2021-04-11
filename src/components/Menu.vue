@@ -50,11 +50,6 @@
 <script>
 export default {
   name: "Menu",
-  data() {
-    return {
-      currentOrdering: this.ordering
-    }
-  },
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
@@ -65,7 +60,6 @@ export default {
   },
   methods: {
     changeOrdering(ordering) {
-      this.currentOrdering = ordering;
       this.$store.commit('changePage', 1);
       this.$store.commit('changeOrdering', ordering);
     }

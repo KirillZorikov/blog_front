@@ -34,11 +34,6 @@
 export default {
   name: "Paginator",
   props: ['total'],
-  data() {
-    return {
-      currentPage: this.page
-    }
-  },
   computed: {
     page() {
       return this.$store.state.page;
@@ -46,17 +41,9 @@ export default {
   },
   methods: {
     changePage(pageNumber) {
-      this.currentPage = pageNumber;
       this.$store.commit('changePage', pageNumber);
     }
   },
-  watch: {
-    page() {
-      if (this.currentPage !== this.page) { // if page changed not from Paginator
-        this.changePage(this.page)
-      }
-    }
-  }
 }
 </script>
 
