@@ -1,40 +1,34 @@
 <template>
-  <h1 class="text-right">Последние обновления на сайте</h1>
-  <!---->
-  <div v-if="message" class="row mt-1 mb-1">
-    <div class="alert alert-success m-auto" role="alert">
-      {{ message }}
-      <button type="button" class="close ml-3" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
+  <div class="col-lg-9">
+    <h1 class="text-right">Последние обновления на сайте</h1>
+    <!---->
+    <div v-if="message" class="row mt-1 mb-1">
+      <div class="alert alert-success m-auto" role="alert">
+        {{ message }}
+        <button type="button" class="close ml-3" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
     </div>
-  </div>
-  <!---->
-  <div class="row mt-1">
-    <div class="col-lg-3">
-      <NavGroups/>
-      <NavTags/>
-    </div>
-    <div class="col-lg-9">
-      <Menu/>
-      <template v-if="listPosts.length">
-        <div v-for="post in listPosts" :key="post.id">
-          <PostCard :post="post" :show_all_text="false"/>
-        </div>
-      </template>
-      <template v-else>
-        <div class="card not-found h-100 text-center d-flex justify-content-center">
-          <p v-if="errorMessage">{{ errorMessage }}</p>
-          <Loading v-if="loading"/>
-          <p v-else>
-            Похоже ещё никто не оставлял свои записи на этом замечательном сайте.
-          </p>
-        </div>
-      </template>
-      <template v-if="totalPages > 1">
-        <Paginator :total="totalPages"/>
-      </template>
-    </div>
+    <!---->
+    <Menu/>
+    <template v-if="listPosts.length">
+      <div v-for="post in listPosts" :key="post.id">
+        <PostCard :post="post" :show_all_text="false"/>
+      </div>
+    </template>
+    <template v-else>
+      <div class="card not-found h-100 text-center d-flex justify-content-center">
+        <p v-if="errorMessage">{{ errorMessage }}</p>
+        <Loading v-if="loading"/>
+        <p v-else>
+          Похоже ещё никто не оставлял свои записи на этом замечательном сайте.
+        </p>
+      </div>
+    </template>
+    <template v-if="totalPages > 1">
+      <Paginator :total="totalPages"/>
+    </template>
   </div>
 </template>
 
@@ -42,11 +36,10 @@
 
 import PostCard from "../components/PostCard";
 import UserService from '../services/user.service';
-import NavTags from "../components/nav/NavTags";
-import NavGroups from "../components/nav/NavGroups";
 import Menu from "../components/Menu";
 import Paginator from "../components/Paginator";
 import Loading from "../components/Loading";
+import SideBar from "../components/SideBar";
 
 export default {
   name: 'Home',
@@ -77,12 +70,11 @@ export default {
     }
   },
   components: {
+    SideBar,
     Loading,
     Paginator,
     Menu,
     PostCard,
-    NavTags,
-    NavGroups,
   },
   created() {
     const windowData = Object.fromEntries(
@@ -146,7 +138,7 @@ export default {
       this.reLoadListPosts()
     },
     $route(to, from) {
-      if (to.fullPath === '/') {
+      if (to.fullPath === '/' || this.$route.name === 'Group' || this.$route.name === 'Tag') {
         this.$store.commit('changePage', 1);
         this.$store.commit('changeOrdering', '-pub_date');
       }

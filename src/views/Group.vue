@@ -1,33 +1,27 @@
 <template>
-  <h4 class="text-right font-italic font-weight-light">
-    {{ group.description }}
-  </h4>
-  <div class="row mt-1">
-    <div class="col-lg-3">
-      <NavGroups :slug="group.slug"/>
-      <NavTags/>
-    </div>
-    <div class="col-lg-9 mb-2">
-      <Menu/>
-      <template v-if="listPosts.length">
-        <div v-for="post in listPosts" :key="post.id">
-          <PostCard :post="post" :show_all_text="false"/>
-        </div>
-      </template>
-      <template v-else>
-        <div class="card not-found h-100 text-center d-flex justify-content-center">
-          <p v-if="errorMessage">{{ errorMessage }}</p>
-          <Loading v-if="loading"/>
-          <p v-else>
-            В этом сообществе ещё нет ни одной записи.
-            Не упустите возможность стать первым!
-          </p>
-        </div>
-      </template>
-      <template v-if="totalPages > 1">
-        <Paginator :total="totalPages"/>
-      </template>
-    </div>
+  <div class="col-lg-9 mb-2">
+    <h4 class="text-right font-italic font-weight-light">
+      {{ group.description }}
+    </h4>
+    <Menu/>
+    <template v-if="listPosts.length">
+      <div v-for="post in listPosts" :key="post.id">
+        <PostCard :post="post" :show_all_text="false"/>
+      </div>
+    </template>
+    <template v-else>
+      <div class="card not-found h-100 text-center d-flex justify-content-center">
+        <p v-if="errorMessage">{{ errorMessage }}</p>
+        <Loading v-if="loading"/>
+        <p v-else>
+          В этом сообществе ещё нет ни одной записи.
+          Не упустите возможность стать первым!
+        </p>
+      </div>
+    </template>
+    <template v-if="totalPages > 1">
+      <Paginator :total="totalPages"/>
+    </template>
   </div>
 </template>
 
@@ -35,11 +29,10 @@
 
 import PostCard from "../components/PostCard";
 import UserService from '../services/user.service';
-import NavTags from "../components/nav/NavTags";
-import NavGroups from "../components/nav/NavGroups";
 import Paginator from "../components/Paginator";
 import Menu from "../components/Menu";
 import Loading from "../components/Loading";
+import SideBar from "../components/SideBar";
 
 export default {
   name: 'Group',
@@ -54,10 +47,9 @@ export default {
     }
   },
   components: {
+    SideBar,
     Loading,
     PostCard,
-    NavTags,
-    NavGroups,
     Paginator,
     Menu,
   },
@@ -82,7 +74,7 @@ export default {
     }
   },
   created() {
-    this.loadListPosts();
+    this.reLoadListPosts();
   },
   methods: {
     loadListPosts() {

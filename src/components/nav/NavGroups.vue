@@ -22,9 +22,11 @@ export default {
       listGroups: [],
     }
   },
-  props: [
-      'slug'
-  ],
+  computed: {
+    slug() {
+      return this.$route.params.slug
+    }
+  },
   created() {
     this.loadListGroups()
   },

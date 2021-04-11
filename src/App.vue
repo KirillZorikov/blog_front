@@ -1,8 +1,11 @@
 <template>
   <Header/>
   <main>
-    <div class="container mt-4">
-      <router-view/>
+    <div class="container mt-3">
+      <div class="row">
+        <SideBar />
+        <router-view/>
+      </div>
     </div>
   </main>
   <Footer/>
@@ -18,10 +21,11 @@
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Home from "@/views/Home";
+import Home from "./views/Home";
+import SideBar from "./components/SideBar";
 
 export default {
-  components: {Home, Header, Footer},
+  components: {SideBar, Home, Header, Footer},
 
 }
 </script>
