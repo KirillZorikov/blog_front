@@ -1,5 +1,4 @@
 <template>
-  <h1 class="text-right">{{ group.title }}</h1>
   <h4 class="text-right font-italic font-weight-light">
     {{ group.description }}
   </h4>
@@ -9,24 +8,24 @@
       <NavTags/>
     </div>
     <div class="col-lg-9 mb-2">
-      <template v-if="errorMessage">
-        {{ errorMessage }}
-      </template>
-      <template v-if="listPosts">
+      <Menu/>
+      <template v-if="listPosts.length">
         <div v-for="post in listPosts" :key="post.id">
           <PostCard :post="post" :show_all_text="false"/>
         </div>
       </template>
       <template v-else>
         <div class="card not-found h-100 text-center d-flex justify-content-center">
-          В этом сообществе ещё нет ни одной записи.
-          Не упустите возможность стать первым!
+          <p v-if="errorMessage">{{ errorMessage }}</p>
+          <p v-else>
+            В этом сообществе ещё нет ни одной записи.
+            Не упустите возможность стать первым!
+          </p>
         </div>
       </template>
-      <!--      {% endfor %}-->
-      <!--      {% if page.has_other_pages %}-->
-      <!--      {% include "posts/include/paginator.html" with items=page paginator=paginator %}-->
-      <!--      {% endif %}-->
+      <template v-if="totalPages > 1">
+        <Paginator :total="totalPages"/>
+      </template>
     </div>
   </div>
 </template>
@@ -37,6 +36,8 @@ import PostCard from "../components/PostCard";
 import UserService from '../services/user.service';
 import NavTags from "../components/nav/NavTags";
 import NavGroups from "../components/nav/NavGroups";
+import Paginator from "../components/Paginator";
+import Menu from "../components/Menu";
 
 export default {
   name: 'Group',
@@ -46,13 +47,15 @@ export default {
       listPosts: [],
       errorMessage: '',
       group: '',
-      ordering: ['-pub_date'],
+      totalPages: 1,
     }
   },
   components: {
     PostCard,
     NavTags,
     NavGroups,
+    Paginator,
+    Menu,
   },
   computed: {
     groupSlug() {
@@ -60,23 +63,36 @@ export default {
     },
     filtering() {
       return {group: this.groupSlug};
+    },
+    pageStateOptions() {
+      return {
+        ordering: this.ordering,
+        page: this.page
+      };
+    },
+    page() {
+      return this.$store.state.page;
+    },
+    ordering() {
+      return this.$store.state.ordering;
     }
   },
   created() {
     this.loadListPosts();
-    this.loadGroup();
   },
   methods: {
     loadListPosts() {
-      UserService.getListPosts(this.ordering, this.filtering).then(
+      UserService.getListPosts(this.ordering, this.page, this.filtering).then(
           response => {
             this.listPosts = response.data.response;
+            this.loadGroup();
           },
           error => {
-            this.errorMessage =
-                (error.response && error.response.data) ||
-                error.message ||
-                error.toString();
+            if (error.response.status === 404) {
+              this.$router.push({name: '404'})
+            } else {
+              this.errorMessage = error.response.data;
+            }
           }
       );
     },
@@ -86,18 +102,45 @@ export default {
             this.group = response.data;
           },
           error => {
-            this.errorMessage =
-                (error.response && error.response.data) ||
-                error.message ||
-                error.toString();
+            if (error.response.status === 404) {
+              this.$router.push({name: '404'})
+            } else {
+              this.errorMessage = error.response.data;
+            }
           }
       );
+    },
+    reLoadListPosts() {
+      this.loadListPosts();
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+      }, 100);
     }
   },
   watch: {
+    pageStateOptions(value) {
+      let url = '';
+      if (this.ordering === '-pub_date') {
+        if (this.page !== 1) {
+          url = `${window.location.pathname}?page=${value.page}`;
+        }
+      } else {
+        if (this.page === 1) {
+          url = `${window.location.pathname}?ordering=${value.ordering.toString()}`;
+        } else {
+          url = `${window.location.pathname}?ordering=${value.ordering.toString()}&page=${value.page}`;
+        }
+      }
+      this.$router.push(url);
+    },
     slug() {
-      this.loadListPosts();
-      this.loadGroup();
+      this.reLoadListPosts()
+    },
+    page() {
+      this.reLoadListPosts()
+    },
+    ordering() {
+      this.reLoadListPosts()
     }
   }
 }
