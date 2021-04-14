@@ -5,19 +5,17 @@
     </template>
     <div class="row pr-3 pl-3">
       <div class="col-1 pt-2 pl-3 d-flex flex-column align-items-center">
-        <a class="up-vote" href="#">
-          <img src="../assets/imgs/postUpvoteIconActive.png" alt="up-vote">
-          <!--          {% else %}-->
-          <!--          <img src="../assets/imgs/postUpvote.png" alt="up-vote">-->
-        </a>
+        <button class="btn bg-transparent shadow-none down-vote" @click="likeDislikePost('like')">
+          <img  v-if="liked" src="../assets/imgs/postUpvoteIconActive.png" alt="up-vote">
+          <img v-else src="../assets/imgs/postUpvote.png" alt="up-vote">
+        </button>
         <small class="rating font-weight-bold">
-          {{ post.likes_count }}
+          {{ rating }}
         </small>
-        <a class="down-vote" href="#">
-          <!--          <img src="../assets/imgs/postUpvoteIconActive.png" alt="down-vote">-->
-          <!--          {% else %}-->
-          <img src="../assets/imgs/postDownvote.png" alt="down-vote">
-        </a>
+        <button class="btn bg-transparent shadow-none down-vote" @click="likeDislikePost('dislike')">
+          <img v-if="disliked" src="../assets/imgs/postDownvoteIconActive.png" alt="down-vote">
+          <img v-else src="../assets/imgs/postDownvote.png" alt="down-vote">
+        </button>
       </div>
       <div class="card-body col-11 pl-3">
         <h6 class="card-subtitle mb-2 text-muted d-flex justify-content-between align-items-center">
@@ -70,17 +68,45 @@
 </template>
 
 <script>
+import UserService from "../services/user.service";
+
 export default {
   name: "PostCard",
   props: [
     'post',
     'show_all_text'
   ],
+  data() {
+    return {
+      liked: this.post.liked,
+      disliked: this.post.disliked,
+      likes_count: this.post.likes_count,
+      dislikes_count: this.post.dislikes_count,
+    }
+  },
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
     },
+    rating() {
+      return this.likes_count - this.dislikes_count;
+    },
   },
+  methods: {
+    likeDislikePost(arg) {
+      if (!this.currentUser) {
+        this.$router.push({name: 'Login'});
+      }
+      let func = arg === 'like' ? UserService.likePost: UserService.dislikePost
+      func(this.post.id).then(
+          response => {
+            this.liked = response.data.liked;
+            this.disliked = response.data.disliked;
+            this.likes_count = response.data.likes_count;
+            this.dislikes_count = response.data.dislikes_count;
+          })
+    },
+  }
 }
 </script>
 

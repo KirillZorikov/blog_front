@@ -39,6 +39,23 @@ class UserService {
     async getAuthorInfo(username) {
         return await axios.get(API_URL + `users/${username}`, {headers: authHeader()});
     }
+
+    async likeComment(post_id, comment_id) {
+        return await axios.post(API_URL + `posts/${post_id}/comments/${comment_id}/like`, {},
+            {headers: authHeader()});
+    }
+    async dislikeComment(post_id, comment_id) {
+        return await axios.post(API_URL + `posts/${post_id}/comments/${comment_id}/dislike`, {},
+            {headers: authHeader()});
+    }
+    async likePost(id) {
+        return await axios.post(API_URL + `posts/${id}/like`, {},
+            {headers: authHeader()});
+    }
+    async dislikePost(id) {
+        return await axios.post(API_URL + `posts/${id}/dislike`, {},
+            {headers: authHeader()});
+    }
 }
 
 export default new UserService();
