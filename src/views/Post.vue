@@ -1,56 +1,59 @@
 <template>
-  <div class="row">
-    <div class="col-md-3 mb-3 mt-1">
-      <div class="card">
-        <div class="card-body">
-          <div class="h2">
-            {{ author.first_name + author.last_name }}
+  <Loading v-if="loading" class="loading_message"/>
+  <template v-else>
+    <div class="row">
+      <div class="col-md-3 mb-3 mt-1">
+        <div class="card">
+          <div class="card-body">
+            <div class="h2">
+              {{ author.first_name + author.last_name }}
+            </div>
+            <div class="h3 text-muted">
+              <a href="#">
+                {{ author.username }}
+              </a>
+            </div>
           </div>
-          <div class="h3 text-muted">
-            <a href="#">
-              {{ author.username }}
-            </a>
-          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <div class="h6 text-muted">
+                Подписчиков: {{ author.following_count }}<br/>
+                Подписан: {{ author.followers_count }}
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="h6 text-muted">
+                Записей: {{ author.posts_count }}
+              </div>
+            </li>
+          </ul>
         </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            <div class="h6 text-muted">
-              Подписчиков: {{ author.following_count }}<br/>
-              Подписан: {{ author.followers_count }}
-            </div>
-          </li>
-          <li class="list-group-item">
-            <div class="h6 text-muted">
-              Записей: {{ author.posts_count }}
-            </div>
-          </li>
-        </ul>
+      </div>
+      <div class="col-md-9">
+        <PostCard :post='post' :show_all_text="true"/>
+        <div class="mt-3">
+          <!--        Comments-->
+        </div>
       </div>
     </div>
-
-    <div class="col-md-9">
-      <PostCard :post='post' :show_all_text="true"/>
-      <div class="mt-3">
-        <!--        Comments-->
-      </div>
-    </div>
-
-  </div>
-
+  </template>
 </template>
 
 <script>
 import UserService from '../services/user.service';
 import PostCard from "../components/PostCard";
+import Loading from "../components/Loading";
 
 export default {
   name: "Post",
-  components: {PostCard},
+  components: {Loading, PostCard},
   props: ['id'],
   data() {
     return {
       post: '',
       author: '',
+      error: '',
+      loading: false
     }
   },
   created() {
@@ -58,10 +61,20 @@ export default {
   },
   methods: {
     loadPost() {
+      this.loading = true;
       UserService.getPost(this.id).then(
           response => {
+            this.loading = false;
             this.post = response.data;
             this.loadAuthor()
+          },
+          error => {
+            this.loading = false;
+            if (error.response.status === 404) {
+              this.$router.push({name: '404'})
+            } else {
+              this.error = error.response.data;
+            }
           }
       )
     },
@@ -77,5 +90,11 @@ export default {
 </script>
 
 <style scoped>
-
+.loading_message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  font-size: x-large;
+}
 </style>
