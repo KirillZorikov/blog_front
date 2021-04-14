@@ -98,20 +98,22 @@ export default {
       );
     },
     loadGroup() {
-      UserService.getGroup(this.groupSlug).then(
-          response => {
-            this.group = response.data;
-            this.loading = false;
-          },
-          error => {
-            this.loading = false;
-            if (error.response.status === 404) {
-              this.$router.push({name: '404'})
-            } else {
-              this.errorMessage = error.response.data;
+      if (this.groupSlug) {
+        UserService.getGroup(this.groupSlug).then(
+            response => {
+              this.group = response.data;
+              this.loading = false;
+            },
+            error => {
+              this.loading = false;
+              if (error.response.status === 404) {
+                this.$router.push({name: '404'})
+              } else {
+                this.errorMessage = error.response.data;
+              }
             }
-          }
-      );
+        );
+      }
     },
   },
   watch: {
@@ -138,6 +140,12 @@ export default {
     },
     ordering() {
       this.loadListPosts()
+    },
+    $route() {
+      if (this.$route.name !== 'Group') {
+        this.$store.commit('changePage', 1);
+        this.$store.commit('changeOrdering', '-pub_date');
+      }
     }
   }
 }
