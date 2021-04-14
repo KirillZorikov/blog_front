@@ -133,7 +133,7 @@ export default {
       this.loadListPosts()
     },
     $route(to, from) {
-      if (to.fullPath === '/' || this.$route.name === 'Group' || this.$route.name === 'Tag') {
+      if (to.fullPath === '/' || this.$route.name !== 'Home') {
         this.$store.commit('changePage', 1);
         this.$store.commit('changeOrdering', '-pub_date');
       }

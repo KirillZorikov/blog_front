@@ -64,9 +64,9 @@ export default {
       this.loading = true;
       UserService.getPost(this.id).then(
           response => {
-            this.loading = false;
             this.post = response.data;
             this.loadAuthor()
+            this.loading = false;
           },
           error => {
             this.loading = false;
