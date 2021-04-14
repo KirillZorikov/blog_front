@@ -1,5 +1,5 @@
 <template>
-  <div class="row justify-content-center">
+  <div class="row w-100 justify-content-center">
     <div class="col-md-8 p-5">
       <div class="card">
         <div class="card-header">Изменить пароль</div>
