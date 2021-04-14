@@ -12,8 +12,8 @@
     </div>
     <!---->
     <Menu/>
-    <template v-if="listPosts.length">
-      <div v-for="post in listPosts" :key="post.id">
+    <template v-if="posts.length">
+      <div v-for="post in posts" :key="post.id">
         <PostCard :post="post" :show_all_text="false"/>
       </div>
     </template>
@@ -48,7 +48,6 @@ export default {
   ],
   data() {
     return {
-      listPosts: [],
       loading: false,
       group: '',
       errorMessage: '',
@@ -67,6 +66,9 @@ export default {
     },
     ordering() {
       return this.$store.state.ordering;
+    },
+    posts() {
+      return this.$store.state.posts;
     }
   },
   components: {
@@ -94,7 +96,7 @@ export default {
       UserService.getListPosts(this.ordering, this.page).then(
           response => {
             this.loading = false;
-            this.listPosts = response.data.response;
+            this.$store.commit('changePosts', response.data.response);
             this.totalPages = response.data['pages_count'];
           },
           error => {
@@ -107,13 +109,6 @@ export default {
           }
       );
     },
-    reLoadListPosts() {
-      this.loadListPosts();
-      window.scroll({
-        top: 0,
-        behavior: 'smooth'
-      });
-    }
   },
   watch: {
     pageStateOptions(value) {
@@ -132,10 +127,10 @@ export default {
       this.$router.push(url);
     },
     page() {
-      this.reLoadListPosts()
+      this.loadListPosts()
     },
     ordering() {
-      this.reLoadListPosts()
+      this.loadListPosts()
     },
     $route(to, from) {
       if (to.fullPath === '/' || this.$route.name === 'Group' || this.$route.name === 'Tag') {

@@ -9,6 +9,7 @@ export const store = createStore({
     state: {
         page: 1,
         ordering: '-pub_date',
+        posts: []
     },
     getters: {
         getPage: state => {
@@ -16,6 +17,9 @@ export const store = createStore({
         },
         getOrdering: state => {
             return state.ordering
+        },
+        getPosts: state => {
+            return state.posts
         }
     },
     mutations: {
@@ -24,6 +28,9 @@ export const store = createStore({
         },
         changeOrdering(state, newOrdering) {
             state.ordering = newOrdering
+        },
+        changePosts(state, newPosts) {
+            state.posts = newPosts
         }
     }
 })

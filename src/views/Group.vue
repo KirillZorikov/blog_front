@@ -4,8 +4,8 @@
       {{ group.description }}
     </h4>
     <Menu/>
-    <template v-if="listPosts.length">
-      <div v-for="post in listPosts" :key="post.id">
+    <template v-if="posts.length">
+      <div v-for="post in posts" :key="post.id">
         <PostCard :post="post" :show_all_text="false"/>
       </div>
     </template>
@@ -39,7 +39,6 @@ export default {
   props: ['slug'],
   data() {
     return {
-      listPosts: [],
       loading: false,
       errorMessage: '',
       group: '',
@@ -71,17 +70,21 @@ export default {
     },
     ordering() {
       return this.$store.state.ordering;
+    },
+    posts() {
+      return this.$store.state.posts;
     }
   },
   created() {
-    this.reLoadListPosts();
+    this.loadListPosts();
   },
   methods: {
     loadListPosts() {
       this.loading = true;
       UserService.getListPosts(this.ordering, this.page, this.filtering).then(
           response => {
-            this.listPosts = response.data.response;
+            this.$store.commit('changePosts', response.data.response);
+            this.totalPages = response.data['pages_count'];
             this.loadGroup();
           },
           error => {
@@ -110,13 +113,6 @@ export default {
           }
       );
     },
-    reLoadListPosts() {
-      this.loadListPosts();
-      window.scroll({
-        top: 0,
-        behavior: 'smooth'
-      });
-    }
   },
   watch: {
     pageStateOptions(value) {
@@ -135,13 +131,13 @@ export default {
       this.$router.push(url);
     },
     slug() {
-      this.reLoadListPosts()
+      this.loadListPosts()
     },
     page() {
-      this.reLoadListPosts()
+      this.loadListPosts()
     },
     ordering() {
-      this.reLoadListPosts()
+      this.loadListPosts()
     }
   }
 }
