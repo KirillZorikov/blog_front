@@ -6,7 +6,7 @@
     <div class="row pr-3 pl-3">
       <div class="col-1 pt-2 pl-3 d-flex flex-column align-items-center">
         <button class="btn bg-transparent shadow-none down-vote" @click="likeDislikePost('like')">
-          <img  v-if="liked" src="../assets/imgs/postUpvoteIconActive.png" alt="up-vote">
+          <img v-if="liked" src="../assets/imgs/postUpvoteIconActive.png" alt="up-vote">
           <img v-else src="../assets/imgs/postUpvote.png" alt="up-vote">
         </button>
         <small class="rating font-weight-bold">
@@ -55,12 +55,12 @@
         </a>
         <small class="text-muted">({{ post.comments_count }})</small>
         <template v-if="currentUser && currentUser.username === post.author.username">
-          <a class="card-link float-right ml-3 card_edit" href="#">
+          <button class="btn bg-transparent shadow-none float-right ml-3 card_edit text-danger" @click="deletePost">
             <i class="far fa-trash-alt"></i> Удалить
-          </a>
-          <a class="card-link float-right ml-3 card_delete" href="#">
+          </button>
+          <button class="btn bg-transparent shadow-none float-right ml-3 card_delete text-primary" href="#">
             <i class="fas fa-pencil-alt"></i> Редактировать
-          </a>
+          </button>
         </template>
       </div>
     </div>
@@ -97,13 +97,26 @@ export default {
       if (!this.currentUser) {
         this.$router.push({name: 'Login'});
       }
-      let func = arg === 'like' ? UserService.likePost: UserService.dislikePost
+      let func = arg === 'like' ? UserService.likePost : UserService.dislikePost
       func(this.post.id).then(
           response => {
             this.liked = response.data.liked;
             this.disliked = response.data.disliked;
             this.likes_count = response.data.likes_count;
             this.dislikes_count = response.data.dislikes_count;
+          })
+    },
+    deletePost() {
+      UserService.deletePost(this.post.id).then(
+          response => {
+            this.$router.push({name: 'Home'});
+          },
+          error => {
+            if (error.response.status === 404) {
+              this.$router.push({name: '404'})
+            } else {
+              this.$router.push({name: 'Home'});
+            }
           })
     },
   }

@@ -16,9 +16,11 @@ class UserService {
             params: params,
         });
     }
-
     async getPost(id) {
         return await axios.get(API_URL + `posts/${id}`, {headers: authHeader()});
+    }
+    async deletePost(id) {
+        return await axios.delete(API_URL + `posts/${id}`, {headers: authHeader()});
     }
 
     async getListGroups(ordering = ['-posts_count', 'title']) {
