@@ -49,7 +49,6 @@
                   <template v-else>Выберите картинку*</template>
                 </label>
               </div>
-              {{ form }}
               <p class="text-right text-secondary btn-block"><small>* - необязательно к заполнению</small></p>
               <div class="form-group mt-3">
                 <button type="submit" class="btn btn-primary btn-block">
@@ -111,7 +110,10 @@ export default {
   computed: {
     isUpdate() {
       return !!this.id
-    }
+    },
+    currentUser() {
+      return this.$store.state.auth.user;
+    },
   },
   created() {
     this.loadListGroups();
@@ -151,6 +153,11 @@ export default {
           }
       );
     },
+    checkAuthorPost(post) {
+      if (this.currentUser.username !== post.author.username) {
+        this.$router.push({name: '404', params: {'from_url': window.location.href}});
+      }
+    },
     prepareForm() {
       let data = new FormData();
       data.append('text', this.form.text);
@@ -173,6 +180,7 @@ export default {
     loadPost() {
       UserService.getPost(this.id).then(
           response => {
+            this.checkAuthorPost(response.data);
             $('.selectpicker').selectpicker('refresh');
             if (response.data.tags) {
               this.form.tags = response.data.tags.map(x => x.id);
