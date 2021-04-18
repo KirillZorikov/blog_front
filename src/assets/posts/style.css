@@ -424,8 +424,12 @@ h1 {
     border-bottom: none !important;
 }
 
-.django-ckeditor-widget {
+.django-ckeditor-widget, .ck.ck-editor {
     width: 100% !important;
+}
+
+.ck-editor__editable {
+  min-height: 300px !important;
 }
 
 .card-text p {
