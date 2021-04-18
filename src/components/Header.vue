@@ -14,7 +14,7 @@
         </form>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item mr-5">
-            <a class="nav-link" href="#">Добавить запись</a>
+            <router-link class="nav-link" :to="{name: 'AddPost'}">Добавить запись</router-link>
           </li>
           <li class="nav-item dropdown">
             <div class="btn-group open">

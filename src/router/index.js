@@ -7,12 +7,24 @@ import ChangePassword from "../views/auth/ChangePassword";
 import NotFound from "../views/misc/NotFound";
 import Post from "../views/Post";
 import Group from "../views/Group";
+import AddUpdatePost from "../views/AddUpdatePost";
 
 const routes = [
     {
         path: '/',
         name: 'Home',
         component: Home,
+        props: true
+    },
+    {
+        path: '/new',
+        name: 'AddPost',
+        component: AddUpdatePost,
+    },
+    {
+        path: '/post/:id/edit',
+        name: 'UpdatePost',
+        component: AddUpdatePost,
         props: true
     },
     {

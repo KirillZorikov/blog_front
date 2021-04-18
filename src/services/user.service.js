@@ -16,11 +16,30 @@ class UserService {
             params: params,
         });
     }
+
     async getPost(id) {
         return await axios.get(API_URL + `posts/${id}`, {headers: authHeader()});
     }
+
     async deletePost(id) {
         return await axios.delete(API_URL + `posts/${id}`, {headers: authHeader()});
+    }
+
+    async addPost(data) {
+        return await axios.post(API_URL + `posts`, data, {headers: authHeader()});
+    }
+
+    async updatePost(id, data) {
+        return await axios.patch(API_URL + `posts/${id}`, data, {headers: authHeader()});
+    }
+
+    async getImage(link) {
+        const config = {responseType: 'blob'};
+        let fileName = link.split('/').pop();
+        if (!fileName) {
+            return '';
+        }
+        return await axios.get(link, config);
     }
 
     async getListGroups(ordering = ['-posts_count', 'title']) {
@@ -46,14 +65,17 @@ class UserService {
         return await axios.post(API_URL + `posts/${post_id}/comments/${comment_id}/like`, {},
             {headers: authHeader()});
     }
+
     async dislikeComment(post_id, comment_id) {
         return await axios.post(API_URL + `posts/${post_id}/comments/${comment_id}/dislike`, {},
             {headers: authHeader()});
     }
+
     async likePost(id) {
         return await axios.post(API_URL + `posts/${id}/like`, {},
             {headers: authHeader()});
     }
+
     async dislikePost(id) {
         return await axios.post(API_URL + `posts/${id}/dislike`, {},
             {headers: authHeader()});

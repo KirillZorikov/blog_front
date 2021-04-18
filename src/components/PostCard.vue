@@ -58,7 +58,7 @@
           <button class="btn bg-transparent shadow-none float-right ml-3 card_edit text-danger" @click="deletePost">
             <i class="far fa-trash-alt"></i> Удалить
           </button>
-          <button class="btn bg-transparent shadow-none float-right ml-3 card_delete text-primary" href="#">
+          <button class="btn bg-transparent shadow-none float-right ml-3 card_delete text-primary" @click="updatePost">
             <i class="fas fa-pencil-alt"></i> Редактировать
           </button>
         </template>
@@ -119,6 +119,9 @@ export default {
             }
           })
     },
+    updatePost() {
+      this.$router.push({name: 'UpdatePost', params: {id: this.post.id}});
+    }
   }
 }
 </script>
