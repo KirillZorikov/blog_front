@@ -25,6 +25,9 @@ export default {
   computed: {
     slug() {
       return this.$route.params.slug
+    },
+    posts() {
+      return this.$store.state.posts;
     }
   },
   created() {
@@ -37,6 +40,11 @@ export default {
             this.listGroups = response.data;
           },
       );
+    }
+  },
+  watch: {
+    posts() {
+      this.loadListGroups();
     }
   }
 }
