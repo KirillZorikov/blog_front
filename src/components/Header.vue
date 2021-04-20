@@ -19,11 +19,11 @@
           <li class="nav-item dropdown">
             <div class="btn-group open">
               <template v-if="currentUser">
-                <a class="btn btn-primary"
-                   href="#">
+                <router-link class="btn btn-primary"
+                   :to="{name: 'Profile', params: {username: currentUser.username}}">
                   <i class="fa fa-user fa-fw"></i>
                   {{ currentUser.username }}
-                </a>
+                </router-link>
                 <a class="btn btn-primary dropdown-toggle"
                    data-toggle="dropdown">
                 </a>

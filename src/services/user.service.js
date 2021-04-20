@@ -24,6 +24,14 @@ class UserService {
             params: params,
         });
     }
+    async getListFollowingPosts(page) {
+        let params = page ? {page: page} : {};
+        return await axios.get(API_URL + `posts/follow`, {
+            headers: authHeader(),
+            params: params,
+        });
+    }
+
 
     async getPost(id) {
         return await axios.get(API_URL + `posts/${id}`, {headers: authHeader()});

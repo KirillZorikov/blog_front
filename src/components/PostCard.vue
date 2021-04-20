@@ -19,17 +19,22 @@
       </div>
       <div class="card-body col-11 pl-3">
         <h6 class="card-subtitle mb-2 text-muted d-flex justify-content-between align-items-center">
-          <a href="#">
+          <router-link v-if="post.author.first_name && post.author.last_name"
+                       :to="{name: 'Profile', params: {username: post.author.username}}">
             {{ post.author.first_name }} {{ post.author.last_name }}
-          </a>
+          </router-link>
+          <span v-else></span>
           <span v-if="post.group" class="card_group">Запись сообщества:
-              <a href="#" class="card-link">
+              <router-link :to="{name: 'Group', params: {slug: post.group.slug}}" class="card-link">
                   {{ post.group.title }}
-              </a>
+              </router-link>
           </span>
         </h6>
         <div class="h7 text-muted">
-          <i class="fas fa-user mr-0"></i> {{ post.author.username }}
+          <i class="fas fa-user mr-0"></i>
+          <router-link class="text-dark ml-1" :to="{name: 'Profile', params: {username: post.author.username}}">
+            {{ post.author.username }}
+          </router-link>
           <i class="far fa-calendar-alt mr-0 ml-3"></i> {{ post.pub_date.split('T')[0].replaceAll('-', '.') }}
         </div>
         <hr>

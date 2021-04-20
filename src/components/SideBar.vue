@@ -11,7 +11,7 @@
 import NavTags from "./nav/NavTags";
 import NavGroups from "./nav/NavGroups";
 
-const showFor = ['Group', 'Home']
+const showFor = ['Group', 'Home', 'Follow']
 
 export default {
   name: "SideBar",

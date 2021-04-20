@@ -6,10 +6,8 @@
           <div class="h2">
             {{ author.last_name }} {{ author.first_name }}
           </div>
-          <div class="h3 text-muted">
-            <a href="{% url 'profile' author.username %}">
+          <div class="h3 text-dark">
               {{ author.username }}
-            </a>
           </div>
         </div>
         <ul class="list-group list-group-flush">
@@ -26,11 +24,12 @@
           </li>
           <li class="list-group-item" :class="{disabled: currentUser && currentUser.username === author.username}">
             <button v-if="followed" class="btn btn-lg btn-light"
-               @click="deleteFollow">
+                    @click="deleteFollow">
               Отписаться
             </button>
-            <button v-else class="btn btn-lg btn-primary" :class="{disabled: currentUser && currentUser.username === author.username}"
-               @click="addFollow">
+            <button v-else class="btn btn-lg btn-primary"
+                    :class="{disabled: currentUser && currentUser.username === author.username}"
+                    @click="addFollow">
               Подписаться
             </button>
           </li>
@@ -47,6 +46,7 @@
       <template v-else>
         <div class="card not-found h-100 text-center d-flex justify-content-center">
           <Loading v-if="loading"/>
+          <p v-else>У этого автора ещё нет никаких постов.</p>
         </div>
       </template>
       <template v-if="totalPages > 1">
@@ -96,17 +96,20 @@ export default {
     },
   },
   created() {
-    const windowData = Object.fromEntries(
-        new URL(window.location).searchParams.entries()
-    );
-    if (windowData.page) {
-      this.$store.commit('changePage', parseInt(windowData.page));
-    }
-    this.loadListPosts();
-    this.loadAuthor();
-    this.loadFollow();
+    this.loadData();
   },
   methods: {
+    loadData() {
+      const windowData = Object.fromEntries(
+          new URL(window.location).searchParams.entries()
+      );
+      if (windowData.page) {
+        this.$store.commit('changePage', parseInt(windowData.page));
+      }
+      this.loadListPosts();
+      this.loadAuthor();
+      this.loadFollow();
+    },
     loadListPosts() {
       this.loading = true;
       UserService.getListPostsByUser(this.username, this.page).then(
@@ -161,7 +164,7 @@ export default {
   },
   watch: {
     pageStateOptions(value) {
-      if (value.page === 1){
+      if (value.page === 1) {
         this.$router.push(`${window.location.pathname}`);
       } else {
         this.$router.push(`${window.location.pathname}?page=${value.page}`);
@@ -169,6 +172,12 @@ export default {
     },
     page() {
       this.loadListPosts()
+    },
+    followed() {
+      this.loadAuthor()
+    },
+    username() {
+      this.loadData()
     },
     $route() {
       if (this.$route.name !== 'Profile') {

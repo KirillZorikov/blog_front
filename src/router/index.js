@@ -9,6 +9,7 @@ import Post from "../views/Post";
 import Group from "../views/Group";
 import AddUpdatePost from "../views/AddUpdatePost";
 import Profile from "../views/Profile";
+import Follow from "../views/Follow";
 
 const routes = [
     {
@@ -65,6 +66,11 @@ const routes = [
         name: 'Profile',
         component: Profile,
         props: true
+    },
+    {
+        path: '/follow',
+        name: 'Follow',
+        component: Follow,
     },
     {
         path: '/about',
