@@ -110,6 +110,7 @@ export default {
       UserService.deletePost(this.post.id).then(
           response => {
             this.$router.push({name: 'Home'});
+            this.$emit('post-deleted');
           },
           error => {
             if (error.response.status === 404) {
