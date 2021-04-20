@@ -14,7 +14,7 @@
     <Menu/>
     <template v-if="posts.length">
       <div v-for="post in posts" :key="post.id">
-        <PostCard :post="post" :show_all_text="false"/>
+        <PostCard :post="post" :show_all_text="false" @post-deleted="loadListPosts"/>
       </div>
     </template>
     <template v-else>
@@ -39,7 +39,6 @@ import UserService from '../services/user.service';
 import Menu from "../components/Menu";
 import Paginator from "../components/Paginator";
 import Loading from "../components/Loading";
-import SideBar from "../components/SideBar";
 
 export default {
   name: 'Home',
@@ -49,7 +48,6 @@ export default {
   data() {
     return {
       loading: false,
-      group: '',
       errorMessage: '',
       totalPages: 1
     }
@@ -69,10 +67,9 @@ export default {
     },
     posts() {
       return this.$store.state.posts;
-    }
+    },
   },
   components: {
-    SideBar,
     Loading,
     Paginator,
     Menu,

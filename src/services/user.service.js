@@ -17,6 +17,14 @@ class UserService {
         });
     }
 
+    async getListPostsByUser(username, page) {
+        let params = page ? {page: page} : {};
+        return await axios.get(API_URL + `${username}`, {
+            headers: authHeader(),
+            params: params,
+        });
+    }
+
     async getPost(id) {
         return await axios.get(API_URL + `posts/${id}`, {headers: authHeader()});
     }
@@ -31,6 +39,16 @@ class UserService {
 
     async updatePost(id, data) {
         return await axios.patch(API_URL + `posts/${id}`, data, {headers: authHeader()});
+    }
+
+    async getListFollow(username) {
+        return await axios.get(API_URL + `follow`, {headers: authHeader()});
+    }
+    async addFollow(username) {
+        return await axios.post(API_URL + `follow`, {author: username}, {headers: authHeader()});
+    }
+    async deleteFollow(username) {
+        return await axios.delete(API_URL + `follow/${username}`, {headers: authHeader()});
     }
 
     async getImage(link) {

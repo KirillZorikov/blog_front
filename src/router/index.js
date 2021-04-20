@@ -8,6 +8,7 @@ import NotFound from "../views/misc/NotFound";
 import Post from "../views/Post";
 import Group from "../views/Group";
 import AddUpdatePost from "../views/AddUpdatePost";
+import Profile from "../views/Profile";
 
 const routes = [
     {
@@ -60,6 +61,12 @@ const routes = [
         props: true
     },
     {
+        path: '/:username',
+        name: 'Profile',
+        component: Profile,
+        props: true
+    },
+    {
         path: '/about',
         name: 'About',
         // route level code-splitting
@@ -91,7 +98,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const publicPages = ['Home', 'Post', 'Register', 'Login', '404', 'Group'];
+    const publicPages = ['Home', 'Post', 'Register', 'Login', '404', 'Group', 'Profile'];
     const authRequired = !publicPages.includes(to.name);
     const loggedIn = localStorage.getItem('user');
     if (!to.name) {
