@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import UserService from '@/services/user.service';
+import {GroupTagsService} from '../../services/user.services';
 export default {
   name: "NavTags",
   data() {
@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     loadListTags() {
-      UserService.getListTags().then(
+      GroupTagsService.getListTags().then(
           response => {
             this.listTags = response.data;
           },

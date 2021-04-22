@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import UserService from '../services/user.service';
+import {PostService, MiscService} from '../services/user.services';
 import PostCard from "../components/PostCard";
 import Loading from "../components/Loading";
 
@@ -62,7 +62,7 @@ export default {
   methods: {
     loadPost() {
       this.loading = true;
-      UserService.getPost(this.id).then(
+      PostService.getPost(this.id).then(
           response => {
             this.post = response.data;
             this.loadAuthor()
@@ -79,7 +79,7 @@ export default {
       )
     },
     loadAuthor() {
-      UserService.getAuthorInfo(this.post.author.username).then(
+      MiscService.getAuthorInfo(this.post.author.username).then(
           response => {
             this.author = response.data;
           }

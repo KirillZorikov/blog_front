@@ -1,6 +1,8 @@
 <template>
   <div class="col-lg-9">
-    <h1 class="text-right">Последние обновления на сайте</h1>
+    <h1 v-if="ordering.includes('date')" class="text-right">Последние обновления на сайте</h1>
+    <h1 v-if="ordering.includes('comments')" class="text-right">Самые обсуждаемые посты</h1>
+    <h1 v-if="ordering.includes('rating')" class="text-right">Самые рейтинговые посты</h1>
     <!---->
     <div v-if="message" class="row mt-1 mb-1">
       <div class="alert alert-success m-auto" role="alert">
@@ -35,7 +37,7 @@
 <script>
 
 import PostCard from "../components/PostCard";
-import UserService from '../services/user.service';
+import {PostService} from '../services/user.services';
 import Menu from "../components/Menu";
 import Paginator from "../components/Paginator";
 import Loading from "../components/Loading";
@@ -90,7 +92,7 @@ export default {
   methods: {
     loadListPosts() {
       this.loading = true;
-      UserService.getListPosts(this.ordering, this.page).then(
+      PostService.getListPosts(this.ordering, this.page).then(
           response => {
             this.loading = false;
             this.$store.commit('changePosts', response.data.response);
@@ -133,6 +135,9 @@ export default {
       if (to.fullPath === '/' || this.$route.name !== 'Home') {
         this.$store.commit('changePage', 1);
         this.$store.commit('changeOrdering', '-pub_date');
+      }
+      if (this.$route.name === 'Follow') {
+        this.$store.commit('changePosts', []);
       }
     }
   }

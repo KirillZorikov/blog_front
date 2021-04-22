@@ -59,7 +59,7 @@
 <script>
 
 import PostCard from "../components/PostCard";
-import UserService from '../services/user.service';
+import {PostService, FollowService, MiscService} from '../services/user.services';
 import Paginator from "../components/Paginator";
 import Loading from "../components/Loading";
 
@@ -112,7 +112,7 @@ export default {
     },
     loadListPosts() {
       this.loading = true;
-      UserService.getListPostsByUser(this.username, this.page).then(
+      PostService.getListPostsByUser(this.username, this.page).then(
           response => {
             this.loading = false;
             this.$store.commit('changePosts', response.data.response);
@@ -127,7 +127,7 @@ export default {
       );
     },
     loadAuthor() {
-      UserService.getAuthorInfo(this.username).then(
+      MiscService.getAuthorInfo(this.username).then(
           response => {
             this.author = response.data;
           }
@@ -137,7 +137,7 @@ export default {
       if (!this.currentUser) {
         return
       }
-      UserService.getListFollow(this.username).then(
+      FollowService.getListFollow(this.username).then(
           response => {
             this.followed = response.data.map(x => x.author).includes(this.username);
           }
@@ -148,14 +148,14 @@ export default {
         this.$router.push({name: 'Login'});
         return
       }
-      UserService.addFollow(this.username).then(
+      FollowService.addFollow(this.username).then(
           response => {
             this.followed = true;
           }
       )
     },
     deleteFollow() {
-      UserService.deleteFollow(this.username).then(
+      FollowService.deleteFollow(this.username).then(
           response => {
             this.followed = false;
           }

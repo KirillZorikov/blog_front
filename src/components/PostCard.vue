@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import UserService from "../services/user.service";
+import {LikeDislikeService, PostService} from "../services/user.services";
 
 export default {
   name: "PostCard",
@@ -102,7 +102,7 @@ export default {
       if (!this.currentUser) {
         this.$router.push({name: 'Login'});
       }
-      let func = arg === 'like' ? UserService.likePost : UserService.dislikePost
+      let func = arg === 'like' ? LikeDislikeService.likePost : LikeDislikeService.dislikePost
       func(this.post.id).then(
           response => {
             this.liked = response.data.liked;
@@ -112,7 +112,7 @@ export default {
           })
     },
     deletePost() {
-      UserService.deletePost(this.post.id).then(
+      PostService.deletePost(this.post.id).then(
           response => {
             this.$router.push({name: 'Home'});
             this.$emit('post-deleted');

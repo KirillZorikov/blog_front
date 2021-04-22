@@ -28,7 +28,7 @@
 <script>
 
 import PostCard from "../components/PostCard";
-import UserService from '../services/user.service';
+import {GroupTagsService, PostService} from '../services/user.services';
 import Paginator from "../components/Paginator";
 import Menu from "../components/Menu";
 import Loading from "../components/Loading";
@@ -81,7 +81,7 @@ export default {
   methods: {
     loadListPosts() {
       this.loading = true;
-      UserService.getListPosts(this.ordering, this.page, this.filtering).then(
+      PostService.getListPosts(this.ordering, this.page, this.filtering).then(
           response => {
             this.$store.commit('changePosts', response.data.response);
             this.totalPages = response.data['pages_count'];
@@ -99,7 +99,7 @@ export default {
     },
     loadGroup() {
       if (this.groupSlug) {
-        UserService.getGroup(this.groupSlug).then(
+        GroupTagsService.getGroup(this.groupSlug).then(
             response => {
               this.group = response.data;
               this.loading = false;

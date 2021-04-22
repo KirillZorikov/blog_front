@@ -1,7 +1,7 @@
 <template>
 
     <div class="col-md-9">
-      <h1 class="text-right">Посты избранных авторов.</h1>
+      <h1 class="text-right">Посты избранных авторов</h1>
       <Menu />
       <template v-if="posts.length">
         <div v-for="post in posts" :key="post.id">
@@ -24,7 +24,7 @@
 <script>
 
 import PostCard from "../components/PostCard";
-import UserService from '../services/user.service';
+import {FollowService} from '../services/user.services';
 import Paginator from "../components/Paginator";
 import Loading from "../components/Loading";
 import Menu from "../components/Menu";
@@ -71,7 +71,7 @@ export default {
     },
     loadListPosts() {
       this.loading = true;
-      UserService.getListFollowingPosts(this.page).then(
+      FollowService.getListFollowingPosts(this.page).then(
           response => {
             this.loading = false;
             this.$store.commit('changePosts', response.data.response);

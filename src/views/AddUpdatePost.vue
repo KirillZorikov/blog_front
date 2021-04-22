@@ -10,7 +10,7 @@
               <template v-else>Добавить пост</template>
             </h3>
             <form class="row register-form" enctype="multipart/form-data" @submit.prevent="handleAddUpdatePost">
-              <!--handle error message from backend-->
+              <!--error message from backend-->
               <div v-if="message" class="alert alert-danger mb-2 w-100"
                    role="alert">
                 {{ message }}
@@ -70,8 +70,7 @@
 
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import CKEditor from '@ckeditor/ckeditor5-vue';
-import UserService from "../services/user.service";
-import axios from "axios";
+import {PostService, GroupTagsService} from "../services/user.services";
 
 export default {
   name: "AddPost",
@@ -133,7 +132,7 @@ export default {
     },
     handleAddPost() {
       let form = this.prepareForm()
-      UserService.addPost(form).then(
+      PostService.addPost(form).then(
           () => {
             this.$router.push({name: 'Home', params: {message: 'Пост успешно добавлен.'}});
           },
@@ -144,7 +143,7 @@ export default {
     },
     handleUpdatePost() {
       let form = this.prepareForm()
-      UserService.updatePost(this.id, form).then(
+      PostService.updatePost(this.id, form).then(
           () => {
             this.$router.push({name: 'Post', params: {'id': this.id}});
           },
@@ -178,7 +177,7 @@ export default {
       this.form.image = this.$refs.file.files[0];
     },
     loadPost() {
-      UserService.getPost(this.id).then(
+      PostService.getPost(this.id).then(
           response => {
             this.checkAuthorPost(response.data);
             $('.selectpicker').selectpicker('refresh');
@@ -200,7 +199,7 @@ export default {
       );
     },
     loadListGroups() {
-      UserService.getListGroups().then(
+      GroupTagsService.getListGroups().then(
           response => {
             this.options.groups = response.data.map(x => {
               return {value: x.id, text: x.title}
@@ -209,7 +208,7 @@ export default {
       );
     },
     loadListTags() {
-      UserService.getListTags().then(
+      GroupTagsService.getListTags().then(
           response => {
             this.options.tags = response.data.map(x => {
               return {value: x.id, text: x.title}
