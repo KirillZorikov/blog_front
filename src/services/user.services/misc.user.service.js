@@ -15,6 +15,14 @@ class MiscUserService {
         }
         return await axios.get(link, config);
     }
+    async addComment(post_id, text, parent_id) {
+        return await axios.post(API_URL + `posts/${post_id}/comments`,
+            {parent: parent_id, text: text},
+            {headers: authHeader()});
+    }
+    async getListComment(post_id) {
+        return await axios.get(API_URL + `posts/${post_id}/comments`,{headers: authHeader()});
+    }
 }
 
 export default new MiscUserService();

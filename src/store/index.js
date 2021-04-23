@@ -9,7 +9,8 @@ export const store = createStore({
     state: {
         page: 1,
         ordering: '-pub_date',
-        posts: []
+        posts: [],
+        selectedToReplyComment: undefined
     },
     getters: {
         getPage: state => {
@@ -20,6 +21,9 @@ export const store = createStore({
         },
         getPosts: state => {
             return state.posts
+        },
+        getSelected: state => {
+            return state.selectedToReplyComment
         }
     },
     mutations: {
@@ -31,6 +35,9 @@ export const store = createStore({
         },
         changePosts(state, newPosts) {
             state.posts = newPosts
+        },
+        changeSelected(state, newState) {
+            state.selectedToReplyComment = newState
         }
     }
 })

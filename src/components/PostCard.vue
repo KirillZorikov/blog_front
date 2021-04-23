@@ -55,9 +55,9 @@
           </template>
         </div>
         <hr>
-        <a class="card-link">
+        <router-link class="card-link" :to="{name: 'Post', params:{id: post.id}}">
           <i class="fa fa-comment"></i> Комментарии
-        </a>
+        </router-link>
         <small class="text-muted">({{ post.comments_count }})</small>
         <template v-if="currentUser && currentUser.username === post.author.username">
           <button class="btn bg-transparent shadow-none float-right ml-3 card_edit text-danger" @click="deletePost">
@@ -70,13 +70,17 @@
       </div>
     </div>
   </div>
+  <Comments v-if="show_all_text" :postId="post.id"/>
 </template>
 
 <script>
 import {LikeDislikeService, PostService} from "../services/user.services";
+import Comments from "./comments/Comments";
 
 export default {
   name: "PostCard",
+  components: {Comments},
+  emits: ['post-deleted'],
   props: [
     'post',
     'show_all_text'
