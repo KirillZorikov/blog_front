@@ -70,7 +70,7 @@
 
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import CKEditor from '@ckeditor/ckeditor5-vue';
-import {PostService, GroupTagsService} from "../services/user.services";
+import {PostService, GroupTagsService, MiscService} from "../services/user.services";
 
 export default {
   name: "AddPost",
@@ -125,8 +125,7 @@ export default {
     handleAddUpdatePost() {
       if (this.isUpdate) {
         this.handleUpdatePost()
-      }
-      else{
+      } else {
         this.handleAddPost()
       }
     },
@@ -180,10 +179,8 @@ export default {
       PostService.getPost(this.id).then(
           response => {
             this.checkAuthorPost(response.data);
-            $('.selectpicker').selectpicker('refresh');
             if (response.data.tags) {
               this.form.tags = response.data.tags.map(x => x.id);
-              $('.selectpicker').selectpicker('val', this.form.tags);
             }
             if (response.data.group) {
               this.form.group = response.data.group.id
@@ -191,7 +188,7 @@ export default {
             this.form.text = response.data.text;
             if (response.data.image) {
               let imageName = response.data.image.split('/').pop();
-              UserService.getImage(response.data.image).then(response => {
+              MiscService.getImage(response.data.image).then(response => {
                 this.form.image = new File([response.data], imageName);
               })
             }
@@ -213,6 +210,7 @@ export default {
             this.options.tags = response.data.map(x => {
               return {value: x.id, text: x.title}
             });
+            this.$nextTick(function() { $('.selectpicker').selectpicker("refresh"); });
           },
       );
     }
