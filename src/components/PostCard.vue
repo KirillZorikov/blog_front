@@ -70,16 +70,13 @@
       </div>
     </div>
   </div>
-  <Comments v-if="show_all_text" :postId="post.id"/>
 </template>
 
 <script>
 import {LikeDislikeService, PostService} from "../services/user.services";
-import Comments from "./comments/Comments";
 
 export default {
   name: "PostCard",
-  components: {Comments},
   emits: ['post-deleted'],
   props: [
     'post',

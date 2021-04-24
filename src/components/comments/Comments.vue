@@ -11,11 +11,14 @@
     </form>
   </div>
 
-  <div v-if="comments" class="comments">
-    <template v-for="comment in comments" :key="comment">
+  <div class="comments">
+    <template v-if="comments.length" v-for="comment in comments" :key="comment">
       <CommentsRecursive v-if="comment.parent === null" :comments="comments"
                          :currentComment="comment" @reply-created="loadListComments"/>
     </template>
+    <div v-if="loading && !comments.length" class="card not-found h-100 text-center d-flex justify-content-center">
+      <Loading />
+    </div>
   </div>
 </template>
 
@@ -23,15 +26,17 @@
 
 import {MiscService} from "../../services/user.services";
 import CommentsRecursive from "./CommentsRecursive";
+import Loading from "../Loading";
 
 export default {
   name: "Comments",
   props: [
     'postId'
   ],
-  components: {CommentsRecursive},
+  components: {CommentsRecursive, Loading},
   data() {
     return {
+      loading: false,
       comments: [],
       form: {
         text: ''
@@ -48,8 +53,10 @@ export default {
   },
   methods: {
     loadListComments(newCommentId) {
+      this.loading = true;
       MiscService.getListComment(this.postId).then(
           response => {
+            this.loading = false;
             this.comments = response.data;
             if (newCommentId) {
               this.scrollToNewComment(newCommentId)

@@ -32,7 +32,8 @@
       <div class="col-md-9">
         <PostCard :post='post' :show_all_text="true"/>
         <div class="mt-3">
-          <!--        Comments-->
+
+          <Comments :postId="id"/>
         </div>
       </div>
     </div>
@@ -43,10 +44,11 @@
 import {PostService, MiscService} from '../services/user.services';
 import PostCard from "../components/PostCard";
 import Loading from "../components/Loading";
+import Comments from "../components/comments/Comments";
 
 export default {
   name: "Post",
-  components: {Loading, PostCard},
+  components: {Loading, PostCard, Comments},
   props: ['id'],
   data() {
     return {
