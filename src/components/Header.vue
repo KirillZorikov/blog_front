@@ -8,8 +8,8 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <form class="form-inline my-2 my-lg-0" action="#">
-          <input class="form-control mr-1" type="text" placeholder="Поиск по сайту" name="search">
+        <form class="form-inline my-2 my-lg-0" @submit.prevent="handleSearch">
+          <input v-model="search" class="form-control mr-1" type="text" placeholder="Поиск по сайту" name="search">
           <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Поиск</button>
         </form>
         <ul class="navbar-nav ml-auto">
@@ -65,7 +65,6 @@
                   </li>
                 </ul>
               </template>
-              <!--              {% endif %}-->
             </div>
           </li>
         </ul>
@@ -79,11 +78,22 @@
 <script>
 export default {
   name: "Nav",
+  data() {
+    return {
+      search: ''
+    }
+  },
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
     },
   },
+  methods: {
+    handleSearch(){
+      this.$router.push({name: 'Search', query:{search: this.search}});
+      this.search = '';
+    }
+  }
 }
 </script>
 

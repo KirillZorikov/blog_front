@@ -4,16 +4,13 @@ import authHeader from "../auth-header";
 const API_URL = 'http://127.0.0.1:8000/api/v1/';
 
 class PostUserService {
-    async getListPosts(ordering, page, filtering) {
-        if (!ordering.includes('pub_date')) {
-            ordering = [ordering, '-pub_date'];
+    async getListPosts(params) {
+        if (params.ordering && !params.ordering.includes('pub_date')) {
+            params.ordering = `${params.ordering},-pub_date`;
         }
-        let params = ordering ? {ordering: ordering.toString()} : {};
-        params = Object.assign({}, params, filtering ? filtering : {});
-        params = Object.assign({}, params, page ? {page: page} : {});
         return await axios.get(API_URL + `posts`, {
             headers: authHeader(),
-            params: params,
+            params: params
         });
     }
     async getListPostsByUser(username, page) {
