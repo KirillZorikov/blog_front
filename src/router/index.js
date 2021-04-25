@@ -11,6 +11,7 @@ import AddUpdatePost from "../views/AddUpdatePost";
 import Profile from "../views/Profile";
 import Follow from "../views/Follow";
 import Search from "../views/Search";
+import Tag from "../views/Tag";
 
 const routes = [
     {
@@ -60,6 +61,12 @@ const routes = [
         path: '/group/:slug',
         name: 'Group',
         component: Group,
+        props: true
+    },
+    {
+        path: '/tag/:slug',
+        name: 'Tag',
+        component: Tag,
         props: true
     },
     {

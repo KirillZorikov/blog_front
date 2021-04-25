@@ -16,6 +16,9 @@ class GroupTagsUserService {
     async getListTags() {
         return await axios.get(API_URL + 'tags', {headers: authHeader()});
     }
+    async getTag(slug) {
+        return await axios.get(API_URL + `tags/${slug}`, {headers: authHeader()});
+    }
 }
 
 export default new GroupTagsUserService();

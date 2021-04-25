@@ -5,9 +5,9 @@
       <div class="tagcloud05">
         <ul>
           <li v-for="tag in listTags" :key="tag">
-            <a href="#">
+            <router-link :to="{name: 'Tag', params:{slug: tag.slug}}">
               <span>{{ tag.title }}</span>
-            </a>
+            </router-link>
           </li>
         </ul>
       </div>

@@ -43,15 +43,15 @@
         </template>
         <template v-else>
           <span class="" v-html="post.text_preview + '...'"></span>
-          <router-link :to="{name: 'Post', params:{id: post.id}}" class="font-italic font-weight-light">
+          <router-link :to="{name: 'Post', params:{id: post.id}}" class="font-italic font-weight-light ml-1">
             читать далее
           </router-link>
         </template>
         <div>
           <template v-for="tag in post.tags" :key="tag">
-            <a href="#" class="card-link ml-1">
+            <router-link :to="{name: 'Tag', params:{slug: tag.slug}}" class="card-link ml-1">
               <span class="badge badge-primary">{{ tag.title }}</span>
-            </a>
+            </router-link>
           </template>
         </div>
         <hr>
