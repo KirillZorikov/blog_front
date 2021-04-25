@@ -77,8 +77,6 @@ export default {
             this.loading = false;
             if (error.response && error.response.status === 404) {
               this.$router.push({name: '404'})
-            } else {
-              this.errorMessage = error.response ? error.response.data : error;
             }
           }
       );

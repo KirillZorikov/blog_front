@@ -11,7 +11,6 @@
     </template>
     <template v-else>
       <div class="card not-found h-100 text-center d-flex justify-content-center">
-        <p v-if="errorMessage">{{ errorMessage }}</p>
         <Loading v-if="loading"/>
         <p v-else>
           В этом сообществе ещё нет ни одной записи.
@@ -40,7 +39,6 @@ export default {
   data() {
     return {
       loading: false,
-      errorMessage: '',
       group: '',
       totalPages: 1,
     }
@@ -110,8 +108,6 @@ export default {
             this.loading = false;
             if (error.response.status === 404) {
               this.$router.push({name: '404'})
-            } else {
-              this.errorMessage = error.response.data;
             }
           }
       );

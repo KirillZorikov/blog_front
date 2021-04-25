@@ -85,8 +85,7 @@ export default {
           }
       );
     },
-  }
-  ,
+  },
   watch: {
     pageStateOptions(value) {
       if (value.page === 1) {
@@ -94,12 +93,10 @@ export default {
       } else {
         this.$router.push(`${window.location.pathname}?page=${value.page}`);
       }
-    }
-    ,
+    },
     page() {
       this.loadListPosts()
-    }
-    ,
+    },
     $route() {
       if (this.$route.name !== 'Follow') {
         this.$store.commit('changePage', 1);

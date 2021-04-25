@@ -25,19 +25,14 @@
       <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
         <button class="dropdown-item" :class="{active: ordering.includes('pub_date')}"
                 @click="changeOrdering('-pub_date')">
-          <!--           href="/?ordering=pub-date"-->
-
           <i class="far fa-calendar-alt"></i> Дате публикации
         </button>
         <button class="dropdown-item" :class="{active: ordering.includes('comments_count')}"
                 @click="changeOrdering('-comments_count')">
-          <!--           href="/?ordering=comments_count">-->
           <i class="far fa-comment"></i> Кол-ву комментов
         </button>
         <button class="dropdown-item" :class="{active: ordering.includes('rating')}"
                 @click="changeOrdering('-rating')">
-          <!--           href="/?ordering=rating"-->
-
           <i class="far fa-thumbs-up"></i> Рейтингу
         </button>
       </div>

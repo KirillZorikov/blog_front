@@ -54,7 +54,6 @@ export default {
     return {
       post: '',
       author: '',
-      error: '',
       loading: false
     }
   },
@@ -74,8 +73,6 @@ export default {
             this.loading = false;
             if (error.response.status === 404) {
               this.$router.push({name: '404'})
-            } else {
-              this.error = error.response.data;
             }
           }
       )
