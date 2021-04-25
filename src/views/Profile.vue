@@ -7,7 +7,7 @@
             {{ author.last_name }} {{ author.first_name }}
           </div>
           <div class="h3 text-dark">
-              {{ author.username }}
+            {{ author.username }}
           </div>
         </div>
         <ul class="list-group list-group-flush">
@@ -130,6 +130,11 @@ export default {
       MiscService.getAuthorInfo(this.username).then(
           response => {
             this.author = response.data;
+          },
+          error => {
+            if (error.response.status === 404) {
+              this.$router.push({name: '404'})
+            }
           }
       )
     },

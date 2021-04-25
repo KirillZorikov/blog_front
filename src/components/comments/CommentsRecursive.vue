@@ -31,7 +31,7 @@
         <button type="button" class="btn-danger float-right" @click="cancelReply">Отменить</button>
       </div>
     </form>
-    <template v-for="comment in comments" :key="comment">
+    <template v-for="comment in comments" :key="comment"> <!-- D: -->
       <CommentsRecursive v-if="comment.parent === currentComment.id" :comments="comments"
                          :currentComment="comment" @reply-created="replyCreated"/>
     </template>
@@ -70,6 +70,7 @@ export default {
     likeDislikeComment(arg) {
       if (!this.currentUser) {
         this.$router.push({name: 'Login'});
+        return
       }
       let func = arg === 'like' ? LikeDislikeService.likeComment : LikeDislikeService.dislikeComment
       func(this.currentComment.post, this.currentComment.id).then(
@@ -81,6 +82,10 @@ export default {
           })
     },
     selectToReply() {
+      if (!this.currentUser) {
+        this.$router.push({name: 'Login'});
+        return
+      }
       this.$store.commit('changeSelected', this.currentComment.id);
     },
     cancelReply() {

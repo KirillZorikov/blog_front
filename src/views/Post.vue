@@ -9,9 +9,9 @@
               {{ author.first_name + author.last_name }}
             </div>
             <div class="h3 text-muted">
-              <a href="#">
+              <router-link :to="{name: 'Profile', params:{username: author.username}}">
                 {{ author.username }}
-              </a>
+              </router-link>
             </div>
           </div>
           <ul class="list-group list-group-flush">

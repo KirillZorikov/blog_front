@@ -77,7 +77,7 @@ import {LikeDislikeService, PostService} from "../services/user.services";
 
 export default {
   name: "PostCard",
-  emits: ['post-deleted'],
+  emits: ['post-deleted', 'rating-changed'],
   props: [
     'post',
     'show_all_text'
@@ -110,6 +110,9 @@ export default {
             this.disliked = response.data.disliked;
             this.likes_count = response.data.likes_count;
             this.dislikes_count = response.data.dislikes_count;
+            if (this.$store.state.ordering.includes('rating')) {
+              this.$emit('rating-changed');
+            }
           })
     },
     deletePost() {

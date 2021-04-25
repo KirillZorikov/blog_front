@@ -16,7 +16,7 @@
     <Menu/>
     <template v-if="posts.length">
       <div v-for="post in posts" :key="post.id">
-        <PostCard :post="post" :show_all_text="false" @post-deleted="loadListPosts"/>
+        <PostCard :post="post" :show_all_text="false" @post-deleted="loadListPosts" @rating-changed="loadListPosts"/>
       </div>
     </template>
     <template v-else>
@@ -78,21 +78,28 @@ export default {
     PostCard,
   },
   created() {
-    const windowData = Object.fromEntries(
-        new URL(window.location).searchParams.entries()
-    );
-    if (windowData.ordering) {
-      this.$store.commit('changeOrdering', windowData.ordering);
-    }
-    if (windowData.page) {
-      this.$store.commit('changePage', parseInt(windowData.page));
-    }
+    this.initUrlParams();
     this.loadListPosts();
   },
   methods: {
+    initUrlParams() {
+      const windowData = Object.fromEntries(
+          new URL(window.location).searchParams.entries()
+      );
+      if (windowData.ordering) {
+        this.$store.commit('changeOrdering', windowData.ordering);
+      }
+      if (windowData.page) {
+        this.$store.commit('changePage', parseInt(windowData.page));
+      }
+    },
     loadListPosts() {
+      if (this.$route.name !== this.$options.name) {
+        return
+      }
       this.loading = true;
-      PostService.getListPosts(this.ordering, this.page).then(
+      let params = {ordering: this.ordering, page: this.page};
+      PostService.getListPosts(params).then(
           response => {
             this.loading = false;
             this.$store.commit('changePosts', response.data.response);
@@ -129,15 +136,12 @@ export default {
       this.loadListPosts()
     },
     ordering() {
-      this.loadListPosts()
+      this.loadListPosts();
     },
-    $route(to, from) {
-      if (to.fullPath === '/' || this.$route.name !== 'Home') {
+    $route() {
+      if (this.$route.name !== this.$options.name) {
         this.$store.commit('changePage', 1);
         this.$store.commit('changeOrdering', '-pub_date');
-      }
-      if (this.$route.name === 'Follow') {
-        this.$store.commit('changePosts', []);
       }
     }
   }

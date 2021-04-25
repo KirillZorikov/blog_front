@@ -6,7 +6,7 @@
     <Menu/>
     <template v-if="posts.length">
       <div v-for="post in posts" :key="post.id">
-        <PostCard :post="post" :show_all_text="false"/>
+        <PostCard :post="post" :show_all_text="false" @rating-changed="loadListPosts"/>
       </div>
     </template>
     <template v-else>
@@ -76,16 +76,35 @@ export default {
     }
   },
   created() {
-    this.loadListPosts();
+    this.initUrlParams();
+    this.loadData();
   },
   methods: {
+    initUrlParams() {
+      const windowData = Object.fromEntries(
+          new URL(window.location).searchParams.entries()
+      );
+      if (windowData.ordering) {
+        this.$store.commit('changeOrdering', windowData.ordering);
+      }
+      if (windowData.page) {
+        this.$store.commit('changePage', parseInt(windowData.page));
+      }
+    },
+    loadData() {
+      this.loadListPosts();
+      this.loadGroup();
+    },
     loadListPosts() {
+      if (this.$route.name !== this.$options.name) {
+        return
+      }
       this.loading = true;
-      PostService.getListPosts(this.ordering, this.page, this.filtering).then(
+      let params = Object.assign({ordering: this.ordering, page: this.page}, this.filtering);
+      PostService.getListPosts(params).then(
           response => {
             this.$store.commit('changePosts', response.data.response);
             this.totalPages = response.data['pages_count'];
-            this.loadGroup();
           },
           error => {
             this.loading = false;
@@ -133,16 +152,16 @@ export default {
       this.$router.push(url);
     },
     slug() {
-      this.loadListPosts()
+      this.loadData()
     },
     page() {
-      this.loadListPosts()
+      this.loadData()
     },
     ordering() {
-      this.loadListPosts()
+      this.loadData()
     },
     $route() {
-      if (this.$route.name !== 'Group') {
+      if (this.$route.name !== this.$options.name) {
         this.$store.commit('changePage', 1);
         this.$store.commit('changeOrdering', '-pub_date');
       }
