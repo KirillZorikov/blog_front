@@ -4,7 +4,7 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import titleMixin from './mixins/titleMixin'
+import titleMixin from './mixins/title.mixin'
 
 const app = createApp(App)
 
