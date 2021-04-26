@@ -1,4 +1,4 @@
-import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/auth/Login.vue';
 import Logout from '../views/auth/Logout.vue';
@@ -12,6 +12,8 @@ import Profile from "../views/Profile";
 import Follow from "../views/Follow";
 import Search from "../views/Search";
 import Tag from "../views/Tag";
+import About from "../views/misc/About";
+import Tech from "../views/misc/Tech";
 
 const routes = [
     {
@@ -87,12 +89,14 @@ const routes = [
         component: Follow,
     },
     {
-        path: '/about',
+        path: '/about-author',
         name: 'About',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+        component: About,
+    },
+    {
+        path: '/about-tech',
+        name: 'Tech',
+        component: Tech,
     },
     {
         path: '/404',
@@ -114,7 +118,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const publicPages = ['Home', 'Post', 'Register', 'Login', '404', 'Group', 'Profile', 'Search', 'Tag'];
+    const publicPages = ['Home', 'Post', 'Register', 'Login', '404', 'Group', 'Profile', 'Search', 'Tag', 'About', 'Tech'];
     const authRequired = !publicPages.includes(to.name);
     const loggedIn = localStorage.getItem('user');
     if (!to.name || to.name === 'Search' && !to.query.search) {

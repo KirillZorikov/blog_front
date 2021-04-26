@@ -1,12 +1,12 @@
 <template>
   <footer class="footer mt-auto text-light">
       <p class="m-0 text-center text-light">
-          <a href="#" class="text-light">Об авторе</a>
+          <router-link :to="{name: 'About'}" class="text-light">Об авторе</router-link>
           -
-          <a href="#" class="text-light">Технологии</a>
+          <router-link :to="{name: 'Tech'}" class="text-light">Технологии</router-link>
       </p>
       <p class="m-0 text-center ">
-          Социальная сеть <span style="color:red">Ya</span>tube
+          <span style="color:red">Ya</span>tube
       </p>
   </footer>
 </template>
