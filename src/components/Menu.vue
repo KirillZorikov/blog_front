@@ -1,21 +1,19 @@
 <template>
   <div class="row pl-4 pr-3 mb-0 d-flex justify-content-between align-items-end">
-    <template v-if="currentUser">
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <router-link class="nav-link text-dark" :class="{active: $route.name === 'Home'}"
-             :to="{name: 'Home'}">
-            Все авторы
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class="nav-link text-dark" :class="{active: $route.name === 'Follow'}"
-             :to="{name: 'Follow'}">
-            Избранные авторы
-          </router-link>
-        </li>
-      </ul>
-    </template>
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <router-link class="nav-link text-dark" :class="{active: $route.name === 'Home'}"
+                     :to="{name: 'Home'}">
+          Все авторы
+        </router-link>
+      </li>
+      <li class="nav-item">
+        <router-link class="nav-link text-dark" :class="{active: $route.name === 'Follow'}"
+                     :to="{name: 'Follow'}">
+          Избранные авторы
+        </router-link>
+      </li>
+    </ul>
     <div></div>
     <div v-if="$route.name !== 'Follow'" class="dropdown show sort">
       <a class="btn btn-dark btn-sm dropdown-toggle shadow-none" href="#" role="button" id="dropdownMenuLink"
@@ -45,9 +43,6 @@
 export default {
   name: "Menu",
   computed: {
-    currentUser() {
-      return this.$store.state.auth.user;
-    },
     ordering() {
       return this.$store.state.ordering;
     },
