@@ -4,6 +4,7 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import titleMixin from './mixins/titleMixin'
 
 const app = createApp(App)
 
@@ -26,6 +27,7 @@ axios.interceptors.response.use((response) => {
 app.use(router)
 app.use(store)
 app.use(VueAxios, axios)
+app.mixin(titleMixin)
 
 app.mount('#app')
 
