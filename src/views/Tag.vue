@@ -26,12 +26,14 @@
 <script>
 
 import PostCard from "../components/PostCard";
-import {GroupTagsService, PostService} from '../services/user.services';
+import {GroupTagsService} from '../services/user.services';
+import {loadPostsMixin, initUrlParamsMixin, watchPageMixin, computedPageMixin} from "../mixins"
 import Paginator from "../components/Paginator";
 import Loading from "../components/Loading";
 
 export default {
   name: 'Tag',
+  mixins: [loadPostsMixin, initUrlParamsMixin, watchPageMixin, computedPageMixin],
   title: 'Посты по тегу',
   props: ['slug'],
   data() {
@@ -46,26 +48,8 @@ export default {
     PostCard,
     Paginator,
   },
-  computed: {
-    pageStateOptions() {
-      return {
-        page: this.page
-      };
-    },
-    queryParams() {
-      return {
-        page: this.$route.query.page
-      };
-    },
-    page() {
-      return this.$store.state.page;
-    },
-    posts() {
-      return this.$store.state.posts;
-    }
-  },
   created() {
-    this.initUrlParams();
+    this.initUrlParams(this.page);
     this.loadData();
   },
   methods: {
@@ -73,32 +57,8 @@ export default {
       this.loadListPosts();
       this.loadTag();
     },
-    initUrlParams() {
-      const windowData = Object.fromEntries(
-          new URL(window.location).searchParams.entries()
-      );
-      if (windowData.page) {
-        this.$store.commit('changePage', parseInt(windowData.page));
-      }
-    },
-    loadListPosts() {
-      if (this.$route.name !== this.$options.name) {
-        return
-      }
-      this.loading = true;
-      let params = {page: this.page, tag: this.slug};
-      PostService.getListPosts(params).then(
-          response => {
-            this.$store.commit('changePosts', response.data.response);
-            this.totalPages = response.data['pages_count'];
-          },
-          error => {
-            this.loading = false;
-            if (error.response.status === 404) {
-              this.$router.push({name: '404'})
-            }
-          }
-      );
+    makeParams() {
+      return {page: this.page, tag: this.slug};
     },
     loadTag() {
       GroupTagsService.getTag(this.slug).then(
@@ -114,29 +74,8 @@ export default {
     }
   },
   watch: {
-    pageStateOptions(value) {
-      if (value.page === 1) {
-        this.$router.push(`${window.location.pathname}`);
-      } else {
-        this.$router.push(`${window.location.pathname}?page=${value.page}`);
-      }
-    },
     slug() {
       this.loadData()
-    },
-    page() {
-      this.loadData()
-    },
-    $route() {
-      if (this.$route.name !== this.$options.name) {
-        this.$store.commit('changePage', 1);
-      }
-    },
-    queryParams(to) {
-      if (this.$route.name !== this.$options.name) {
-        return
-      }
-      this.$store.commit('changePage', to.page ? parseInt(to.page): 1)
     }
   }
 }

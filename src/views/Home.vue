@@ -36,13 +36,14 @@
 <script>
 
 import PostCard from "../components/PostCard";
-import {PostService} from '../services/user.services';
+import {loadPostsMixin, initUrlParamsMixin, watchPageOrderingMixin, computedPageOrderingMixin} from "../mixins"
 import Menu from "../components/Menu";
 import Paginator from "../components/Paginator";
 import Loading from "../components/Loading";
 
 export default {
   name: 'Home',
+  mixins: [loadPostsMixin, initUrlParamsMixin, watchPageOrderingMixin, computedPageOrderingMixin],
   title: 'Главная страница',
   props: [
     'message'
@@ -53,29 +54,6 @@ export default {
       totalPages: 1
     }
   },
-  computed: {
-    pageStateOptions() {
-      return {
-        ordering: this.ordering,
-        page: this.page
-      };
-    },
-    queryParams() {
-      return {
-        ordering: this.$route.query.ordering,
-        page: this.$route.query.page
-      };
-    },
-    page() {
-      return this.$store.state.page;
-    },
-    ordering() {
-      return this.$store.state.ordering;
-    },
-    posts() {
-      return this.$store.state.posts;
-    },
-  },
   components: {
     Loading,
     Paginator,
@@ -83,76 +61,15 @@ export default {
     PostCard,
   },
   created() {
-    this.initUrlParams();
-    this.loadListPosts();
+    this.initUrlParams(this.page, this.ordering);
+    this.loadData();
   },
   methods: {
-    initUrlParams() {
-      const windowData = Object.fromEntries(
-          new URL(window.location).searchParams.entries()
-      );
-      if (windowData.ordering) {
-        this.$store.commit('changeOrdering', windowData.ordering);
-      }
-      if (windowData.page) {
-        this.$store.commit('changePage', parseInt(windowData.page));
-      }
-    },
-    loadListPosts() {
-      if (this.$route.name !== this.$options.name) {
-        return
-      }
-      this.loading = true;
-      let params = {ordering: this.ordering, page: this.page};
-      PostService.getListPosts(params).then(
-          response => {
-            this.loading = false;
-            this.$store.commit('changePosts', response.data.response);
-            this.totalPages = response.data['pages_count'];
-          },
-          error => {
-            this.loading = false;
-            if (error.response.status === 404) {
-              this.$router.push({name: '404'})
-            }
-          }
-      );
-    },
-  },
-  watch: {
-    pageStateOptions(value) {
-      let url = '';
-      if (this.ordering === '-pub_date') {
-        if (this.page !== 1) {
-          url = `${window.location.pathname}?page=${value.page}`;
-        }
-      } else {
-        if (this.page === 1) {
-          url = `${window.location.pathname}?ordering=${value.ordering.toString()}`;
-        } else {
-          url = `${window.location.pathname}?ordering=${value.ordering.toString()}&page=${value.page}`;
-        }
-      }
-      this.$router.push(url);
-    },
-    page() {
-      this.loadListPosts()
-    },
-    ordering() {
+    loadData() {
       this.loadListPosts();
     },
-    $route() {
-      if (this.$route.name !== this.$options.name) {
-        this.$store.commit('changePage', 1);
-        this.$store.commit('changeOrdering', '-pub_date');
-      }
-    },
-    queryParams(to) {
-      if (this.$route.name !== this.$options.name) {
-        return
-      }
-      this.$store.commit('changePage', to.page ? parseInt(to.page): 1)
-      this.$store.commit('changeOrdering', to.ordering ? to.ordering: '-pub_date');
+    makeParams() {
+      return {ordering: this.ordering, page: this.page};
     }
   }
 }

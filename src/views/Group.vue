@@ -27,7 +27,8 @@
 <script>
 
 import PostCard from "../components/PostCard";
-import {GroupTagsService, PostService} from '../services/user.services';
+import {GroupTagsService} from '../services/user.services';
+import {loadPostsMixin, initUrlParamsMixin, watchPageOrderingMixin, computedPageOrderingMixin} from "../mixins"
 import Paginator from "../components/Paginator";
 import Menu from "../components/Menu";
 import Loading from "../components/Loading";
@@ -35,6 +36,7 @@ import SideBar from "../components/SideBar";
 
 export default {
   name: 'Group',
+  mixins: [loadPostsMixin, initUrlParamsMixin, watchPageOrderingMixin, computedPageOrderingMixin],
   title: 'Записи сообщества',
   props: ['slug'],
   data() {
@@ -57,67 +59,19 @@ export default {
     },
     filtering() {
       return {group: this.groupSlug};
-    },
-    pageStateOptions() {
-      return {
-        ordering: this.ordering,
-        page: this.page
-      };
-    },
-    queryParams() {
-      return {
-        ordering: this.$route.query.ordering,
-        page: this.$route.query.page
-      };
-    },
-    page() {
-      return this.$store.state.page;
-    },
-    ordering() {
-      return this.$store.state.ordering;
-    },
-    posts() {
-      return this.$store.state.posts;
     }
   },
   created() {
-    this.initUrlParams();
+    this.initUrlParams(this.page, this.ordering);
     this.loadData();
   },
   methods: {
-    initUrlParams() {
-      const windowData = Object.fromEntries(
-          new URL(window.location).searchParams.entries()
-      );
-      if (windowData.ordering) {
-        this.$store.commit('changeOrdering', windowData.ordering);
-      }
-      if (windowData.page) {
-        this.$store.commit('changePage', parseInt(windowData.page));
-      }
-    },
     loadData() {
       this.loadListPosts();
       this.loadGroup();
     },
-    loadListPosts() {
-      if (this.$route.name !== this.$options.name) {
-        return
-      }
-      this.loading = true;
-      let params = Object.assign({ordering: this.ordering, page: this.page}, this.filtering);
-      PostService.getListPosts(params).then(
-          response => {
-            this.$store.commit('changePosts', response.data.response);
-            this.totalPages = response.data['pages_count'];
-          },
-          error => {
-            this.loading = false;
-            if (error.response.status === 404) {
-              this.$router.push({name: '404'})
-            }
-          }
-      );
+    makeParams() {
+      return Object.assign({ordering: this.ordering, page: this.page}, this.filtering)
     },
     loadGroup() {
       if (this.groupSlug) {
@@ -139,42 +93,8 @@ export default {
     },
   },
   watch: {
-    pageStateOptions(value) {
-      let url = '';
-      if (this.ordering === '-pub_date') {
-        if (this.page !== 1) {
-          url = `${window.location.pathname}?page=${value.page}`;
-        }
-      } else {
-        if (this.page === 1) {
-          url = `${window.location.pathname}?ordering=${value.ordering.toString()}`;
-        } else {
-          url = `${window.location.pathname}?ordering=${value.ordering.toString()}&page=${value.page}`;
-        }
-      }
-      this.$router.push(url);
-    },
     slug() {
       this.loadData()
-    },
-    page() {
-      this.loadData()
-    },
-    ordering() {
-      this.loadData()
-    },
-    $route() {
-      if (this.$route.name !== this.$options.name) {
-        this.$store.commit('changePage', 1);
-        this.$store.commit('changeOrdering', '-pub_date');
-      }
-    },
-    queryParams(to) {
-      if (this.$route.name !== this.$options.name) {
-        return
-      }
-      this.$store.commit('changePage', to.page ? parseInt(to.page): 1)
-      this.$store.commit('changeOrdering', to.ordering ? to.ordering: '-pub_date');
     }
   }
 }

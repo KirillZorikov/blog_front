@@ -60,11 +60,13 @@
 
 import PostCard from "../components/PostCard";
 import {PostService, FollowService, MiscService} from '../services/user.services';
+import {initUrlParamsMixin, watchPageMixin, computedPageMixin} from "../mixins"
 import Paginator from "../components/Paginator";
 import Loading from "../components/Loading";
 
 export default {
   name: "Profile",
+  mixins: [initUrlParamsMixin, watchPageMixin, computedPageMixin],
   title () {
     return `Профиль пользователя: ${this.username}`
   },
@@ -82,29 +84,8 @@ export default {
       followed: false,
     }
   },
-  computed: {
-    pageStateOptions() {
-      return {
-        page: this.page
-      };
-    },
-    queryParams() {
-      return {
-        page: this.$route.query.page
-      };
-    },
-    page() {
-      return this.$store.state.page;
-    },
-    posts() {
-      return this.$store.state.posts;
-    },
-    currentUser() {
-      return this.$store.state.auth.user;
-    },
-  },
   created() {
-    this.initUrlParams();
+    this.initUrlParams(this.page);
     this.loadData();
   },
   methods: {
@@ -112,14 +93,6 @@ export default {
       this.loadListPosts();
       this.loadAuthor();
       this.loadFollow();
-    },
-    initUrlParams() {
-      const windowData = Object.fromEntries(
-          new URL(window.location).searchParams.entries()
-      );
-      if (windowData.page) {
-        this.$store.commit('changePage', parseInt(windowData.page));
-      }
     },
     loadListPosts() {
       this.loading = true;
@@ -179,32 +152,11 @@ export default {
     }
   },
   watch: {
-    pageStateOptions(value) {
-      if (value.page === 1) {
-        this.$router.push(`${window.location.pathname}`);
-      } else {
-        this.$router.push(`${window.location.pathname}?page=${value.page}`);
-      }
-    },
-    page() {
-      this.loadListPosts()
-    },
     followed() {
       this.loadAuthor()
     },
     username() {
       this.loadData()
-    },
-    $route() {
-      if (this.$route.name !== this.$options.name) {
-        this.$store.commit('changePage', 1);
-      }
-    },
-    queryParams(to) {
-      if (this.$route.name !== this.$options.name) {
-        return
-      }
-      this.$store.commit('changePage', to.page ? parseInt(to.page) : 1)
     }
   }
 }

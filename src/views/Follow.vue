@@ -25,12 +25,14 @@
 
 import PostCard from "../components/PostCard";
 import {FollowService} from '../services/user.services';
+import {initUrlParamsMixin, watchPageMixin, computedPageMixin} from "../mixins"
 import Paginator from "../components/Paginator";
 import Loading from "../components/Loading";
 import Menu from "../components/Menu";
 
 export default {
   name: "Follow",
+  mixins: [initUrlParamsMixin, watchPageMixin, computedPageMixin],
   title: 'Посты избранных авторов',
   components: {
     Menu,
@@ -44,35 +46,13 @@ export default {
       totalPages: 1,
     }
   },
-  computed: {
-    pageStateOptions() {
-      return {
-        page: this.page
-      };
-    },
-    queryParams() {
-      return {
-        page: this.$route.query.page
-      };
-    },
-    page() {
-      return this.$store.state.page;
-    },
-    posts() {
-      return this.$store.state.posts;
-    },
-  },
   created() {
-    this.loadListPosts();
+    this.initUrlParams(this.page)
+    this.loadData();
   },
   methods: {
-    initUrlParams() {
-      const windowData = Object.fromEntries(
-          new URL(window.location).searchParams.entries()
-      );
-      if (windowData.page) {
-        this.$store.commit('changePage', parseInt(windowData.page));
-      }
+    loadData() {
+      this.loadListPosts();
     },
     loadListPosts() {
       this.loading = true;
@@ -91,29 +71,6 @@ export default {
           }
       );
     },
-  },
-  watch: {
-    pageStateOptions(value) {
-      if (value.page === 1) {
-        this.$router.push(`${window.location.pathname}`);
-      } else {
-        this.$router.push(`${window.location.pathname}?page=${value.page}`);
-      }
-    },
-    page() {
-      this.loadListPosts()
-    },
-    $route() {
-      if (this.$route.name !== this.$options.name) {
-        this.$store.commit('changePage', 1);
-      }
-    },
-    queryParams(to) {
-      if (this.$route.name !== this.$options.name) {
-        return
-      }
-      this.$store.commit('changePage', to.page ? parseInt(to.page): 1)
-    }
   }
 }
 </script>
