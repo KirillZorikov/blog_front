@@ -18,21 +18,6 @@
               Регистрация
             </h3>
             <form class="row register-form" @submit.prevent="handleRegister">
-              <!--              {% csrf_token %}-->
-              <!--              {% for field, errors in form.errors.items %}-->
-              <!--              {% for error in errors %}-->
-              <!--              <div class="alert alert-danger mb-2 w-100"-->
-              <!--                   role="alert">-->
-              <!--                {{ field }}:-->
-              <!--                {{ error }}-->
-              <!--                <button type="button" class="close"-->
-              <!--                        data-dismiss="alert" aria-label="Close">-->
-              <!--                  <span aria-hidden="true">&times;</span>-->
-              <!--                </button>-->
-              <!--              </div>-->
-              <!--              {% endfor %}-->
-              <!--              {% endfor %}-->
-
               <div class="form-group input-group">
                 <div class="input-group-prepend">
                                 <span class="input-group-text">
@@ -117,15 +102,6 @@
                     placeholder="Повторите пароль"
                 />
               </div>
-
-              <!--          <div class="alert alert-danger mb-2" role="alert">-->
-              <!--            {{ message }}-->
-              <!--            <button type="button" class="close ml-3"-->
-              <!--                    data-dismiss="alert" aria-label="Close">-->
-              <!--              <span aria-hidden="true">&times;</span>-->
-              <!--            </button>-->
-              <!--          </div>-->
-              <!--          <script src='https://www.google.com/recaptcha/api.js'></script>-->
               <div class="form-group g-recaptcha input-group"
                    data-sitekey="6LdB0Q0aAAAAADNyqvkOzqNuhJnHglBjzY-LVzqn"></div>
               <div class="form-group mt-3">
@@ -151,6 +127,7 @@ import User from "@/models/user";
 
 export default {
   name: "Register",
+  title: 'Регистрация',
   data() {
     return {
       user: new User(),

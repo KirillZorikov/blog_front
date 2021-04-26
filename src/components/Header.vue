@@ -6,15 +6,14 @@
               aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <form class="form-inline my-2 my-lg-0" @submit.prevent="handleSearch">
-          <input v-model="search" class="form-control mr-1" type="text" placeholder="Поиск по сайту" name="search">
+          <input v-model="search" required class="form-control mr-1" type="text" placeholder="Поиск по сайту">
           <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Поиск</button>
         </form>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item mr-5">
-            <router-link class="nav-link" :to="{name: 'AddPost'}">Добавить запись</router-link>
+            <router-link class="nav-link" :to="{name: 'AddPost'}">Добавить пост</router-link>
           </li>
           <li class="nav-item dropdown">
             <div class="btn-group open">

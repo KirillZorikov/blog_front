@@ -19,7 +19,7 @@
           </li>
           <li class="list-group-item">
             <div class="h6 text-muted">
-              Записей: {{ author.posts_count }}
+              Постов: {{ author.posts_count }}
             </div>
           </li>
           <li class="list-group-item" :class="{disabled: currentUser && currentUser.username === author.username}">
@@ -65,6 +65,9 @@ import Loading from "../components/Loading";
 
 export default {
   name: "Profile",
+  title () {
+    return `Профиль пользователя: ${this.username}`
+  },
   props: ['username'],
   components: {
     Loading,
@@ -85,6 +88,11 @@ export default {
         page: this.page
       };
     },
+    queryParams() {
+      return {
+        page: this.$route.query.page
+      };
+    },
     page() {
       return this.$store.state.page;
     },
@@ -96,19 +104,22 @@ export default {
     },
   },
   created() {
+    this.initUrlParams();
     this.loadData();
   },
   methods: {
     loadData() {
+      this.loadListPosts();
+      this.loadAuthor();
+      this.loadFollow();
+    },
+    initUrlParams() {
       const windowData = Object.fromEntries(
           new URL(window.location).searchParams.entries()
       );
       if (windowData.page) {
         this.$store.commit('changePage', parseInt(windowData.page));
       }
-      this.loadListPosts();
-      this.loadAuthor();
-      this.loadFollow();
     },
     loadListPosts() {
       this.loading = true;
@@ -185,9 +196,15 @@ export default {
       this.loadData()
     },
     $route() {
-      if (this.$route.name !== 'Profile') {
+      if (this.$route.name !== this.$options.name) {
         this.$store.commit('changePage', 1);
       }
+    },
+    queryParams(to) {
+      if (this.$route.name !== this.$options.name) {
+        return
+      }
+      this.$store.commit('changePage', to.page ? parseInt(to.page) : 1)
     }
   }
 }

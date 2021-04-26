@@ -35,6 +35,7 @@ import SideBar from "../components/SideBar";
 
 export default {
   name: 'Group',
+  title: 'Записи сообщества',
   props: ['slug'],
   data() {
     return {
@@ -61,6 +62,12 @@ export default {
       return {
         ordering: this.ordering,
         page: this.page
+      };
+    },
+    queryParams() {
+      return {
+        ordering: this.$route.query.ordering,
+        page: this.$route.query.page
       };
     },
     page() {
@@ -161,6 +168,13 @@ export default {
         this.$store.commit('changePage', 1);
         this.$store.commit('changeOrdering', '-pub_date');
       }
+    },
+    queryParams(to) {
+      if (this.$route.name !== this.$options.name) {
+        return
+      }
+      this.$store.commit('changePage', to.page ? parseInt(to.page): 1)
+      this.$store.commit('changeOrdering', to.ordering ? to.ordering: '-pub_date');
     }
   }
 }

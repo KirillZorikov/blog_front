@@ -42,7 +42,7 @@
           <span v-html="post.text"></span>
         </template>
         <template v-else>
-          <span class="" v-html="post.text_preview + '...'"></span>
+          <span class="" v-html="post.text_preview"></span>
           <router-link :to="{name: 'Post', params:{id: post.id}}" class="font-italic font-weight-light ml-1">
             читать далее
           </router-link>
@@ -102,6 +102,7 @@ export default {
     likeDislikePost(arg) {
       if (!this.currentUser) {
         this.$router.push({name: 'Login'});
+        return
       }
       let func = arg === 'like' ? LikeDislikeService.likePost : LikeDislikeService.dislikePost
       func(this.post.id).then(

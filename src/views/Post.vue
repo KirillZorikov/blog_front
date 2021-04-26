@@ -23,7 +23,7 @@
             </li>
             <li class="list-group-item">
               <div class="h6 text-muted">
-                Записей: {{ author.posts_count }}
+                Постов: {{ author.posts_count }}
               </div>
             </li>
           </ul>
@@ -48,6 +48,7 @@ import Comments from "../components/comments/Comments";
 
 export default {
   name: "Post",
+  title: 'Пост',
   components: {Loading, PostCard, Comments},
   props: ['id'],
   data() {

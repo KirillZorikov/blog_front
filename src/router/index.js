@@ -114,7 +114,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const publicPages = ['Home', 'Post', 'Register', 'Login', '404', 'Group', 'Profile', 'Search'];
+    const publicPages = ['Home', 'Post', 'Register', 'Login', '404', 'Group', 'Profile', 'Search', 'Tag'];
     const authRequired = !publicPages.includes(to.name);
     const loggedIn = localStorage.getItem('user');
     if (!to.name || to.name === 'Search' && !to.query.search) {

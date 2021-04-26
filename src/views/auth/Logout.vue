@@ -12,10 +12,11 @@
 </template>
 
 <script>
-import User from '@/models/user';
+import User from '../../models/user';
 
 export default {
   name: "Logout",
+  title: 'Выход',
   data() {
     return {
       user: new User('', ''),

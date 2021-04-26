@@ -31,6 +31,7 @@ import Loading from "../components/Loading";
 
 export default {
   name: "Search",
+  title: 'Поиск',
   components: {PostCard, Paginator, Loading},
   data() {
     return {
@@ -44,6 +45,11 @@ export default {
         page: this.page
       };
     },
+    queryParams() {
+      return {
+        page: this.$route.query.page
+      };
+    },
     searchParam() {
       return this.$route.query.search;
     },
@@ -55,16 +61,22 @@ export default {
     },
   },
   created() {
-    const windowData = Object.fromEntries(
-        new URL(window.location).searchParams.entries()
-    );
-    if (windowData.page) {
-      this.$store.commit('changePage', parseInt(windowData.page));
-    }
+    this.initUrlParams();
     this.loadListPosts();
   },
   methods: {
+    initUrlParams() {
+      const windowData = Object.fromEntries(
+          new URL(window.location).searchParams.entries()
+      );
+      if (windowData.page) {
+        this.$store.commit('changePage', parseInt(windowData.page));
+      }
+    },
     loadListPosts() {
+      if (this.$route.name !== this.$options.name) {
+        return
+      }
       this.loading = true;
       let params = {search: this.searchParam, page: this.page};
       PostService.getListPosts(params).then(
@@ -97,9 +109,15 @@ export default {
       this.loadListPosts();
     },
     $route() {
-      if (this.$route.name !== 'Search') {
+      if (this.$route.name !== this.$options.name) {
         this.$store.commit('changePage', 1);
       }
+    },
+    queryParams(to) {
+      if (this.$route.name !== this.$options.name) {
+        return
+      }
+      this.$store.commit('changePage', to.page ? parseInt(to.page): 1)
     }
   }
 }

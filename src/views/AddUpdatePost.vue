@@ -73,7 +73,10 @@ import CKEditor from '@ckeditor/ckeditor5-vue';
 import {PostService, GroupTagsService, MiscService} from "../services/user.services";
 
 export default {
-  name: "AddPost",
+  name: "AddUpdatePost",
+  title () {
+    return this.isUpdate ? 'Изменить пост': 'Добавить пост'
+  },
   components: {
     ckeditor: CKEditor.component
   },

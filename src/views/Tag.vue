@@ -32,6 +32,7 @@ import Loading from "../components/Loading";
 
 export default {
   name: 'Tag',
+  title: 'Посты по тегу',
   props: ['slug'],
   data() {
     return {
@@ -49,6 +50,11 @@ export default {
     pageStateOptions() {
       return {
         page: this.page
+      };
+    },
+    queryParams() {
+      return {
+        page: this.$route.query.page
       };
     },
     page() {
@@ -125,6 +131,12 @@ export default {
       if (this.$route.name !== this.$options.name) {
         this.$store.commit('changePage', 1);
       }
+    },
+    queryParams(to) {
+      if (this.$route.name !== this.$options.name) {
+        return
+      }
+      this.$store.commit('changePage', to.page ? parseInt(to.page): 1)
     }
   }
 }

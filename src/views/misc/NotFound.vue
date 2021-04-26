@@ -13,6 +13,7 @@
 <script>
 export default {
   name: "NotFound",
+  title: '404',
   props: [
       'from_url'
   ]

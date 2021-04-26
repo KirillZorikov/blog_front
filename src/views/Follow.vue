@@ -31,6 +31,7 @@ import Menu from "../components/Menu";
 
 export default {
   name: "Follow",
+  title: 'Посты избранных авторов',
   components: {
     Menu,
     Loading,
@@ -47,6 +48,11 @@ export default {
     pageStateOptions() {
       return {
         page: this.page
+      };
+    },
+    queryParams() {
+      return {
+        page: this.$route.query.page
       };
     },
     page() {
@@ -98,9 +104,15 @@ export default {
       this.loadListPosts()
     },
     $route() {
-      if (this.$route.name !== 'Follow') {
+      if (this.$route.name !== this.$options.name) {
         this.$store.commit('changePage', 1);
       }
+    },
+    queryParams(to) {
+      if (this.$route.name !== this.$options.name) {
+        return
+      }
+      this.$store.commit('changePage', to.page ? parseInt(to.page): 1)
     }
   }
 }
