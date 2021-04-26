@@ -18,6 +18,10 @@
               Регистрация
             </h3>
             <form class="row register-form" @submit.prevent="handleRegister">
+              <div v-if="message.first_name" class="alert alert-danger mb-2 w-100"
+                   role="alert">
+                {{ message['first_name'].join() }}
+              </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
                                 <span class="input-group-text">
@@ -28,9 +32,13 @@
                     v-model="user.first_name"
                     type="text"
                     class="form-control"
-                    name="username"
                     placeholder="Ваше имя"
                 />
+              </div>
+
+              <div v-if="message.last_name" class="alert alert-danger mb-2 w-100"
+                   role="alert">
+                {{ message['last_name'].join() }}
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
@@ -42,9 +50,13 @@
                     v-model="user.last_name"
                     type="text"
                     class="form-control"
-                    name="username"
                     placeholder="Фамилия"
                 />
+              </div>
+
+              <div v-if="message.username" class="alert alert-danger mb-2 w-100"
+                   role="alert">
+                {{ message['username'].join() }}
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
@@ -56,9 +68,13 @@
                     v-model="user.username"
                     type="text"
                     class="form-control"
-                    name="username"
                     placeholder="Имя пользователя"
                 />
+              </div>
+
+              <div v-if="message.email" class="alert alert-danger mb-2 w-100"
+                   role="alert">
+                {{ message['email'].join() }}
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
@@ -70,9 +86,13 @@
                     v-model="user.email"
                     type="email"
                     class="form-control"
-                    name="username"
                     placeholder="Почтовый адрес"
                 />
+              </div>
+
+              <div v-if="message.password" class="alert alert-danger mb-2 w-100"
+                   role="alert">
+                {{ message['password'].join() }}
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
@@ -84,9 +104,13 @@
                     v-model="user.password"
                     type="password"
                     class="form-control"
-                    name="username"
                     placeholder="Пароль"
                 />
+              </div>
+
+              <div v-if="message.password2" class="alert alert-danger mb-2 w-100"
+                   role="alert">
+                {{ message['password2'].join() }}
               </div>
               <div class="form-group input-group">
                 <div class="input-group-prepend">
@@ -98,9 +122,13 @@
                     v-model="password2"
                     type="password"
                     class="form-control"
-                    name="username"
                     placeholder="Повторите пароль"
                 />
+              </div>
+
+              <div v-if="message.recaptcha" class="alert alert-danger mb-2 w-100"
+                   role="alert">
+                {{ message['recaptcha'].join() }}
               </div>
               <div class="form-group g-recaptcha input-group"
                    data-sitekey="6LdB0Q0aAAAAADNyqvkOzqNuhJnHglBjzY-LVzqn"></div>
@@ -109,9 +137,6 @@
                   <span v-show="loading" class="spinner-border spinner-border-sm"></span>
                   <span>Зарегистрироваться</span>
                 </button>
-              </div>
-              <div class="form-group">
-                <div v-if="message" class="alert alert-danger" role="alert">{{ message }}</div>
               </div>
             </form>
           </div>
@@ -159,7 +184,7 @@ export default {
     handleRegister(submitEvent) {
       let recaptcha = submitEvent.target.elements['g-recaptcha-response'].value
       if (!recaptcha) {
-        this.message = 'Введите капчу!'
+        this.message = {'recaptcha':['Введите капчу!']}
         return
       }
       this.user.recaptcha_key = recaptcha
