@@ -128,7 +128,7 @@ router.beforeEach((to, from, next) => {
         })
     }
     if (authRequired && !loggedIn) {
-        next('/login');
+        next({name: 'Login'});
     } else {
         next();
     }
