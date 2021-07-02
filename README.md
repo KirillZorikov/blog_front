@@ -1,4 +1,9 @@
-# vue3-blog
+# blog_front
+
+https://kz-projects.tk/blog
+
+Frontend for the blog project. More info there: https://github.com/KirillZorikov/blog_back
+
 
 ## Project setup
 ```

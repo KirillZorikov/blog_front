@@ -94,7 +94,7 @@ export default {
   },
   created() {
     if (this.loggedIn) {
-      this.$router.push('/');
+      this.$router.push({name: 'Home'});
     }
   },
   methods: {
@@ -103,7 +103,7 @@ export default {
         this.loading = true;
         this.$store.dispatch('auth/login', this.user).then(
             () => {
-              this.$router.push('/');
+              this.$router.push({name: 'Home'});
             },
             error => {
               this.loading = false;

@@ -1,7 +1,8 @@
 import axios from 'axios';
-import authHeader from "@/services/auth-header";
+import authHeader from "../services/auth-header";
+import {constants} from '../constants'
 
-const API_URL = "http://127.0.0.1:8000/api/v1/auth/";
+const API_URL = constants.API_URL + 'auth/';
 
 class AuthService {
     login(user) {

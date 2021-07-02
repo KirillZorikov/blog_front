@@ -177,7 +177,7 @@ export default {
   },
   created() {
     if (this.loggedIn) {
-      this.$router.push('/');
+      this.$router.push({name: 'Home'});
     }
   },
   methods: {
@@ -197,7 +197,7 @@ export default {
                   this.$router.push({name: 'Home', params: {message: 'Вы успешно зарегистрировались!'}});
                 },
                 error => {
-                  this.$router.push('/login');
+                  this.$router.push({name: 'Login'});
                 }
             )
           },

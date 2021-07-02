@@ -17,89 +17,89 @@ import Tech from "../views/misc/Tech";
 
 const routes = [
     {
-        path: '/',
+        path: '/blog/',
         name: 'Home',
         component: Home,
         props: true
     },
     {
-        path: '/new',
+        path: '/blog/new',
         name: 'AddPost',
         component: AddUpdatePost,
     },
     {
-        path: '/post/:id/edit',
+        path: '/blog/post/:id/edit',
         name: 'UpdatePost',
         component: AddUpdatePost,
         props: true
     },
     {
-        path: '/login',
+        path: '/blog/login',
         name: 'Login',
         component: Login
     },
     {
-        path: '/logout',
+        path: '/blog/logout',
         name: 'Logout',
         component: Logout
     },
     {
-        path: '/change-password',
+        path: '/blog/change-password',
         name: 'ChangePassword',
         component: ChangePassword
     },
     {
-        path: '/signup',
+        path: '/blog/signup',
         name: 'Register',
         component: Register
     },
     {
-        path: '/post/:id',
+        path: '/blog/post/:id',
         name: 'Post',
         component: Post,
         props: true
     },
     {
-        path: '/group/:slug',
+        path: '/blog/group/:slug',
         name: 'Group',
         component: Group,
         props: true
     },
     {
-        path: '/tag/:slug',
+        path: '/blog/tag/:slug',
         name: 'Tag',
         component: Tag,
         props: true
     },
     {
-        path: '/posts',
+        path: '/blog/posts',
         name: 'Search',
         component: Search,
         props: true
     },
     {
-        path: '/:username',
+        path: '/blog/:username',
         name: 'Profile',
         component: Profile,
         props: true
     },
     {
-        path: '/follow',
+        path: '/blog/follow',
         name: 'Follow',
         component: Follow,
     },
     {
-        path: '/about-author',
+        path: '/blog/about-author',
         name: 'About',
         component: About,
     },
     {
-        path: '/about-tech',
+        path: '/blog/about-tech',
         name: 'Tech',
         component: Tech,
     },
     {
-        path: '/404',
+        path: '/blog/404',
         name: '404',
         component: NotFound,
         props: true
@@ -107,7 +107,7 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(process.env.BASE_URL),
+    history: createWebHistory(),
     routes,
     scrollBehavior(to, from, savedPosition) {
         return window.scrollTo({
