@@ -1,8 +1,10 @@
 # blog_front
 
-https://kz-projects.tk/blog
+Vue 3 frontend for the blog project.
 
-Frontend for the blog project. More info there: https://github.com/KirillZorikov/blog_back
+Project site: https://kz-projects.tk/blog
+
+More info is here: https://github.com/KirillZorikov/blog_back
 
 
 ## Project setup
