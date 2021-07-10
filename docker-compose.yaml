@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  nginx:
+    image: nginx:1.19.0-alpine
+    restart: always
+    volumes:
+      - ./nginx/app.conf:/etc/nginx/conf.d/app.conf
+      - ./dist-blog:/etc/nginx/html/dist-blog
+    ports:
+      - 80:80
