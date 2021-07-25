@@ -2,7 +2,7 @@
 
 Vue 3 frontend for the blog project.
 
-Project site: https://kz-projects.tk/blog
+Project site: https://kz-projects.tk/blog/
 
 More info is here: https://github.com/KirillZorikov/blog_back
 
